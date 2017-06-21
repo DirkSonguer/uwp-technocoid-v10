@@ -19,6 +19,7 @@
                 <Button  x:Name="startSequencer" Width="50" Height="50" Margin="10,0,0,0" Click="startSequencer_Click" Content="&#xE102;" FontFamily="Segoe UI Symbol"/>
                 <TextBox x:Name="textCurrentBPM" Margin="20,0,0,0" TextWrapping="Wrap" Text="TextBox" TextChanged="textCurrentBPM_TextChanged"/>
                 <Slider x:Name="sliderCurrentBPM" Margin="20,0,0,0" Width="100" Minimum="60" Maximum="240" ValueChanged="sliderCurrentBPM_ValueChanged"/>
+                <Button  x:Name="goExternal" Content="GotFocus external" Height="50" Margin="10,0,0,0" Click="goExternal_Click" />
             </StackPanel>
 
             <MediaPlayerElement x:Name="mediaPlayerElement"

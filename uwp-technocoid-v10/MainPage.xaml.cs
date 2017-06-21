@@ -24,63 +24,56 @@ using Windows.UI.ViewManagement;
 using Windows.Graphics.Display;
 using Windows.System.Threading;
 using Windows.UI.Core;
-
+using Windows.ApplicationModel.Core;
+using System.ComponentModel;
 
 namespace uwp_technocoid_v10
 {
-    // This is a video item, representing one sequencer step
-    public class VideoItem
-    {
-        // MediaSource for the video. This will be handed to the MediaPlayer
-        public MediaSource videoMediaSource { get; set; }
-
-        // Thumbnail for the video. This will be shown on the step button
-        public StorageItemThumbnail videoThumbnail { get; set; }
-    }
-
-    // A sequencer track, assuming we will have multiple tracks at some point
-    public class SequencerTrack
-    {
-        // The video items in one track
-        public VideoItem[] videoItems = new VideoItem[12];
-    }
-
     public sealed partial class MainPage : Page
     {
-        // The main sequencer track object
-        SequencerTrack uiSequencerData = new SequencerTrack();
+        GlobalSequencerController globalSequencerControllerInstance;
+        GlobalSequencerData globalSequencerDataInstance;
+        GlobalEventHandler globalEventHandlerInstance;
 
-        // The master timer, later running as a task in the thread pool
-        static ThreadPoolTimer masterTimer;
+        private bool isRunningInFullScreenView = false;
 
-        // The currently selected BPM count in different units
-        public int currentBPM = 60;
-        public int currentBPMinMS = 1000;
-        public TimeSpan currentBPMinSpan = TimeSpan.FromSeconds(1);
-
-        // The current sequencer cursor position
-        public int currentSequencerPosition = 0;
-
-        // Flag if the sequencer is currently running
-        public bool isSequencerRunning = false;
-
-        // Constructor of the main page
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MainPage()
         {
             this.InitializeComponent();
 
+            // Get an instance to the sequencer controller.
+            this.globalSequencerControllerInstance = GlobalSequencerController.GetInstance();
+
+            // Get an instance to the event handler and subscribe to the SequencerPositionChanged event.
+            this.globalEventHandlerInstance = GlobalEventHandler.GetInstance();
+            this.globalEventHandlerInstance.SequencerPositionChanged += this.SequencerTrigger;
+
+            // Get an instance to the sequencer data handler.
+            this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
+
+            // Initially create the UI.
             CreateUI();
+
+            // Make sure we update the UI when the main window is resized.
             Window.Current.SizeChanged += UpdateUI;
         }
 
-        // This will initially create the 
+        /// <summary>
+        /// This will initially create the UI.
+        /// Note that some of the the UI does not exist at first and is created dynamically.
+        /// </summary>
         public void CreateUI()
         {
+            // Get current (new) window size and scale.
             var newWindowBounds = ApplicationView.GetForCurrentView().VisibleBounds;
             var newWindowScaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             var newWindowSize = new Size(newWindowBounds.Width * newWindowScaleFactor, newWindowBounds.Height * newWindowScaleFactor);
             var newButtonSize = Convert.ToInt32(newWindowSize.Width / (12 * newWindowScaleFactor));
 
+            // 
             for (int i = 0; i < 12; i++)
             {
                 sequencerTrack.Children.Add(new Button
@@ -96,12 +89,10 @@ namespace uwp_technocoid_v10
                 addedButtonElement.Click += openVideo_Click;
                 addedButtonElement.Width = newButtonSize;
                 addedButtonElement.Height = newButtonSize;
-
-                textCurrentBPM.Text = "60";
-                sliderCurrentBPM.Value = 60;
-
-                uiSequencerData.videoItems[i] = new VideoItem();
             }
+
+            textCurrentBPM.Text = "60";
+            sliderCurrentBPM.Value = 60;
         }
 
         private void UpdateUI(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
@@ -119,69 +110,50 @@ namespace uwp_technocoid_v10
             }
         }
 
-
-        private async void SequencerMainLoop(ThreadPoolTimer timer)
+        private void SequencerTrigger(object currentSequencerPosition, PropertyChangedEventArgs e)
         {
-            var dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
-            await dispatcher.RunAsync(
-             CoreDispatcherPriority.Normal, () =>
-             {
-                 int lastSequencerPosition = this.currentSequencerPosition;
-                 this.currentSequencerPosition += 1;
-                 if (this.currentSequencerPosition > 11) this.currentSequencerPosition = 0;
+            statusTextControl.Text = "Sequencer is at step " + currentSequencerPosition.ToString();
 
-                 statusTextControl.Text = "Sequencer is at step " + this.currentSequencerPosition.ToString();
+            int lastSequencerPosition = (int)currentSequencerPosition - 1;
+            if (lastSequencerPosition < 0) lastSequencerPosition = 11;
 
-                 Button currentSequencerUIElement = (Button)this.FindName("_" + this.currentSequencerPosition.ToString());
-                 statusTextControl.Text += " and button " + currentSequencerUIElement.Name;
-                 currentSequencerUIElement.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Teal);
+            Button currentSequencerUIElement = (Button)this.FindName("_" + currentSequencerPosition.ToString());
+            statusTextControl.Text += " and button " + currentSequencerUIElement.Name;
+            currentSequencerUIElement.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Teal);
 
-                 Button lastSequencerUIElement = (Button)this.FindName("_" + lastSequencerPosition.ToString());
-                 lastSequencerUIElement.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Gray);
+            Button lastSequencerUIElement = (Button)this.FindName("_" + lastSequencerPosition.ToString());
+            lastSequencerUIElement.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Gray);
 
-                 if (this.uiSequencerData.videoItems[this.currentSequencerPosition].videoMediaSource != null)
-                 {
-                     statusTextControl.Text += ", playing a media element";
-                     mediaPlayerElement.MediaPlayer.Source = this.uiSequencerData.videoItems[this.currentSequencerPosition].videoMediaSource;
-                     mediaPlayerElement.MediaPlayer.Play();
-                 }
-                 else
-                 {
-                     statusTextControl.Text += ", pausing";
-                 }
-             });
+            if (!this.isRunningInFullScreenView)
+            {
+                VideoItem currentVideoItem = globalSequencerDataInstance.getVideoItemForPosition((int)currentSequencerPosition);
+                if (currentVideoItem.videoMediaSource != null)
+                {
+                    statusTextControl.Text += ", playing a media element";
+                    mediaPlayerElement.MediaPlayer.Source = currentVideoItem.videoMediaSource;
+                    mediaPlayerElement.MediaPlayer.Play();
+                }
+                else
+                {
+                    statusTextControl.Text += ", pausing";
+                }
+            }
         }
+
 
         private void startSequencer_Click(object sender, RoutedEventArgs e)
         {
-            if (this.isSequencerRunning)
+            if ("\uE102" == startSequencer.Content.ToString())
             {
-                this.currentSequencerPosition = 0;
-                masterTimer.Cancel();
-
-                for (int i = 0; i < 12; i++)
-                {
-                    Button addedButtonElement = (Button)this.FindName("_" + i.ToString());
-                    addedButtonElement.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Gray);
-                }
-
-                startSequencer.Content = "\uE102";
-
-                mediaPlayerElement.MediaPlayer.Pause();
-
-                this.isSequencerRunning = false;
+                startSequencer.Content = "\uE103";
+                mediaPlayerElement.MediaPlayer.IsLoopingEnabled = true;
+                globalEventHandlerInstance.TriggerCurrentlyPlayingChanged(true);
             }
             else
             {
-                this.currentSequencerPosition = 0;
-                masterTimer = ThreadPoolTimer.CreatePeriodicTimer(SequencerMainLoop, this.currentBPMinSpan);
-
-                startSequencer.Content = "\uE103";
-
-                mediaPlayerElement.MediaPlayer.Play();
-                mediaPlayerElement.MediaPlayer.IsLoopingEnabled = true;
-
-                this.isSequencerRunning = true;
+                startSequencer.Content = "\uE102";
+                mediaPlayerElement.MediaPlayer.Pause();
+                globalEventHandlerInstance.TriggerCurrentlyPlayingChanged(false);
             }
         }
 
@@ -202,12 +174,16 @@ namespace uwp_technocoid_v10
                 int i = 0;
                 i = int.Parse(senderElementName);
 
-                this.uiSequencerData.videoItems[i].videoMediaSource = MediaSource.CreateFromStorageFile(file);
-                this.uiSequencerData.videoItems[i].videoThumbnail = await file.GetThumbnailAsync(ThumbnailMode.SingleItem);
+                VideoItem newVideoItem = new VideoItem();
+
+                newVideoItem.videoFile = file;
+                newVideoItem.videoMediaSource = MediaSource.CreateFromStorageFile(file);
+                newVideoItem.videoThumbnail = await file.GetThumbnailAsync(ThumbnailMode.SingleItem);
+                this.globalSequencerDataInstance.setVideoItemAtPosition(i, newVideoItem);
 
                 BitmapImage image = new BitmapImage();
                 ImageBrush imagebrush = new ImageBrush();
-                image.SetSource(this.uiSequencerData.videoItems[i].videoThumbnail);
+                image.SetSource(newVideoItem.videoThumbnail);
                 Button currentSequencerUIElement = (Button)this.FindName("_" + senderElementName);
                 imagebrush.ImageSource = image;
                 currentSequencerUIElement.Background = imagebrush;
@@ -225,15 +201,29 @@ namespace uwp_technocoid_v10
 
         private void textCurrentBPM_TextChanged(object sender, TextChangedEventArgs e)
         {
-            this.currentBPM = int.Parse(textCurrentBPM.Text);
-            this.currentBPMinMS = Convert.ToInt32(60000 / this.currentBPM);
-            this.currentBPMinSpan = new TimeSpan(0, 0, 0, 0, this.currentBPMinMS);
+            this.globalSequencerControllerInstance.UpdateBPM(int.Parse(textCurrentBPM.Text));
+        }
 
-            if (this.isSequencerRunning)
+        private async void goExternal_Click(object sender, RoutedEventArgs e)
+        {
+            CoreApplicationView newView = CoreApplication.CreateNewView();
+            int newViewId = 0;
+            this.isRunningInFullScreenView = true;
+            this.globalEventHandlerInstance.playerDispatcher = newView.Dispatcher;
+            mediaPlayerElement.MediaPlayer.Pause();
+            await newView.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                masterTimer.Cancel();
-                masterTimer = ThreadPoolTimer.CreatePeriodicTimer(SequencerMainLoop, this.currentBPMinSpan);
-            }
+                Frame frame = new Frame();
+                frame.Navigate(typeof(FullScreenViewer), null);
+                Window.Current.Content = frame;
+                // You have to activate the window in order to show it later.
+                Window.Current.Activate();
+
+                newViewId = ApplicationView.GetForCurrentView().Id;
+                var newWindowId = ApplicationView.GetApplicationViewIdForWindow(newView.CoreWindow);
+            });
+            bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
+            statusTextControl.Text = "External view created";
         }
     }
 }
