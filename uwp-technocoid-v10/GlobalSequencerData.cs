@@ -33,7 +33,10 @@ namespace uwp_technocoid_v10
     /// </summary>
     class SequencerTrack
     {
-        // The video items in one track
+        // The current opacity of the track player.
+        public double opacity = 1.0;
+
+        // The video items in one track.
         public SequencerSlot[] slots = new SequencerSlot[8];
     }
 
@@ -91,5 +94,16 @@ namespace uwp_technocoid_v10
             return tracks[sequencerTrack].slots[sequencerPosition];
         }
 
+        public void setOpacityForTrack(int sequencerTrack, double newTrackOpacity)
+        {
+            if ((newTrackOpacity >= 0.0) && (newTrackOpacity <= 1.0)) {
+                tracks[sequencerTrack].opacity = newTrackOpacity;
+            }
+        }
+
+        public double getOpacityForTrack(int sequencerTrack)
+        {
+            return tracks[sequencerTrack].opacity;
+        }
     }
 }

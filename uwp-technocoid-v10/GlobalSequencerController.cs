@@ -44,7 +44,7 @@ namespace uwp_technocoid_v10
             set
             {
                 _currentSequencerPosition = value;
-                globalEventHandlerInstance.TriggerSequencerPositionChanged(value);
+                globalEventHandlerInstance.NotifySequencerPositionChanged(value);
             }
         }
 

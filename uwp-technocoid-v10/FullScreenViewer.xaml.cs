@@ -34,6 +34,8 @@ namespace uwp_technocoid_v10
             // Bind the StartSequencer() function to the CurrentlyPlayingChanged event.
             this.globalEventHandlerInstance.CurrentlyPlayingChanged += this.StartSequencer;
 
+            // Bind the ChangeOpacity() function to the TrackOpacityChanged event.
+            this.globalEventHandlerInstance.TrackOpacityChanged += this.ChangeOpacity;
 
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
@@ -56,8 +58,8 @@ namespace uwp_technocoid_v10
                  if ((currentSlotItem.videoMediaSource != null) && (currentSlotItem.active))
                  {
                      // If so, then bind the video source to the video player and start playing the new source.
-                     mediaPlayerElementFullScreen.MediaPlayer.Source = currentSlotItem.videoMediaSource;
-                     mediaPlayerElementFullScreen.MediaPlayer.Play();
+                     mediaPlayerElementTrack0.MediaPlayer.Source = currentSlotItem.videoMediaSource;
+                     mediaPlayerElementTrack0.MediaPlayer.Play();
                  }
 
                  // Get the video item for the current sequencer position.
@@ -67,8 +69,8 @@ namespace uwp_technocoid_v10
                  if ((currentSlotItem.videoMediaSource != null) && (currentSlotItem.active))
                  {
                      // If so, then bind the video source to the video player and start playing the new source.
-                     mediaPlayerElementTrack2.MediaPlayer.Source = currentSlotItem.videoMediaSource;
-                     mediaPlayerElementTrack2.MediaPlayer.Play();
+                     mediaPlayerElementTrack1.MediaPlayer.Source = currentSlotItem.videoMediaSource;
+                     mediaPlayerElementTrack1.MediaPlayer.Play();
                  }
 
              });
@@ -87,11 +89,33 @@ namespace uwp_technocoid_v10
              {
                  if ((bool)isCurrentlyPlaying)
                  {
-                     mediaPlayerElementFullScreen.MediaPlayer.Play();
+                     mediaPlayerElementTrack0.MediaPlayer.Play();
+                     mediaPlayerElementTrack1.MediaPlayer.Play();
                  }
                  else
                  {
-                     mediaPlayerElementFullScreen.MediaPlayer.Pause();
+                     mediaPlayerElementTrack0.MediaPlayer.Pause();
+                     mediaPlayerElementTrack1.MediaPlayer.Pause();
+                 }
+             });
+        }
+
+        /// <summary>
+        /// A sequencer track changed its opacity.
+        /// </summary>
+        /// <param name="sequencerTrack">The sequencer track that changed its opacity.</param>
+        /// <param name="e">PropertyChangedEventArgs.</param>
+        private async void ChangeOpacity(object sequencerTrack, PropertyChangedEventArgs e)
+        {
+            double newTrackOpacity = this.globalSequencerDataInstance.getOpacityForTrack((int)sequencerTrack);
+
+            await this.globalEventHandlerInstance.playerDispatcher.RunAsync(
+             CoreDispatcherPriority.Normal, () =>
+             {
+                 MediaPlayerElement currentMediaPlayerUIElement = (MediaPlayerElement)this.FindName("mediaPlayerElementTrack" + (int)sequencerTrack);
+                 if (currentMediaPlayerUIElement != null)
+                 {
+                     currentMediaPlayerUIElement.Opacity = newTrackOpacity;
                  }
              });
         }

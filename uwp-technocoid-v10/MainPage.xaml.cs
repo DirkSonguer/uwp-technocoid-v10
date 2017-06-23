@@ -234,12 +234,12 @@ namespace uwp_technocoid_v10
             if ("\uE102" == startSequencer.Content.ToString())
             {
                 startSequencer.Content = "\uE103";
-                globalEventHandlerInstance.TriggerCurrentlyPlayingChanged(true);
+                globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
             }
             else
             {
                 startSequencer.Content = "\uE102";
-                globalEventHandlerInstance.TriggerCurrentlyPlayingChanged(false);
+                globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
             }
         }
 
@@ -261,6 +261,23 @@ namespace uwp_technocoid_v10
         private void textCurrentBPM_TextChanged(object sender, TextChangedEventArgs e)
         {
             this.globalSequencerControllerInstance.UpdateBPM(int.Parse(textCurrentBPM.Text));
+        }
+
+        /// <summary>
+        /// TODO!
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeOpacityForTrack(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            // Extract the track ID for the checkbox that triggered the event.
+            String senderElementName = (sender as Slider).Name.Substring(14);
+            String senderElementTrack = senderElementName.Substring(0, senderElementName.IndexOf("OpacitySlider"));
+            int selectedTrack = 0;
+            selectedTrack = int.Parse(senderElementTrack);
+
+            this.globalSequencerDataInstance.setOpacityForTrack(selectedTrack, ((sender as Slider).Value/100));
+            this.globalEventHandlerInstance.NotifyTrackOpacityChanged(selectedTrack);
         }
     }
 }

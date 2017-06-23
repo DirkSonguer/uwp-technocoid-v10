@@ -31,26 +31,18 @@ namespace uwp_technocoid_v10
         // An event indicating that the current sequencer position has changed.
         // Classes can subscribe to this event and get notified.
         public event PropertyChangedEventHandler SequencerPositionChanged;
-        private void NotifySequencerPositionChanged(int currentSequencerPosition)
+        public void NotifySequencerPositionChanged(int currentSequencerPosition)
         {
             if (SequencerPositionChanged != null)
             {
                 SequencerPositionChanged(currentSequencerPosition, new PropertyChangedEventArgs("int currentSequencerPosition"));
             }
         }
-
-        // The trigger used to indicate a position change which is then propagated
-        // to all subscribed methods.
-        public void TriggerSequencerPositionChanged(int currentSequencerPosiiton)
-        {
-
-            NotifySequencerPositionChanged(currentSequencerPosiiton);
-        }
-
+        
         // An event indicating that the sequencer has been started or stopped.
         // Classes can subscribe to this event and get notified.
         public event PropertyChangedEventHandler CurrentlyPlayingChanged;
-        private void NotifyCurrentlyPlayingChanged(bool isCurrentlyPlaying)
+        public void NotifyCurrentlyPlayingChanged(bool isCurrentlyPlaying)
         {
             if (CurrentlyPlayingChanged != null)
             {
@@ -58,12 +50,15 @@ namespace uwp_technocoid_v10
             }
         }
 
-        // The trigger used to indicate a player change which is then propagated
-        // to all subscribed methods.
-        public void TriggerCurrentlyPlayingChanged(bool isCurrentlyPlaying)
+        // An event indicating that the sequencer has been started or stopped.
+        // Classes can subscribe to this event and get notified.
+        public event PropertyChangedEventHandler TrackOpacityChanged;
+        public void NotifyTrackOpacityChanged(int sequencerTrack)
         {
-
-            NotifyCurrentlyPlayingChanged(isCurrentlyPlaying);
+            if (TrackOpacityChanged != null)
+            {
+                TrackOpacityChanged(sequencerTrack, new PropertyChangedEventArgs("int sequencerTrack"));
+            }
         }
     }
 }

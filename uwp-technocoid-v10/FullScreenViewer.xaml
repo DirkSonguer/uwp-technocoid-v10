@@ -8,9 +8,9 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <MediaPlayerElement x:Name="mediaPlayerElementFullScreen"
+        <MediaPlayerElement x:Name="mediaPlayerElementTrack0"
                                        Opacity="1.0" AutoPlay="False" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AreTransportControlsEnabled="False"/>
-        <MediaPlayerElement x:Name="mediaPlayerElementTrack2"
-                                       Opacity="0.5" AutoPlay="False" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AreTransportControlsEnabled="False"/>
+        <MediaPlayerElement x:Name="mediaPlayerElementTrack1"
+                                       Opacity="0.75" AutoPlay="False" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AreTransportControlsEnabled="False"/>
     </Grid>
 </Page>
