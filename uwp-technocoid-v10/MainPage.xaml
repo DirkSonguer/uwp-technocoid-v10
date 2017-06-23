@@ -18,15 +18,85 @@
                 <!-- player controls here-->
                 <Button  x:Name="startSequencer" Width="50" Height="50" Margin="10,0,0,0" Click="startSequencer_Click" Content="&#xE102;" FontFamily="Segoe UI Symbol"/>
                 <TextBox x:Name="textCurrentBPM" Margin="20,0,0,0" TextWrapping="Wrap" Text="TextBox" TextChanged="textCurrentBPM_TextChanged"/>
-                <Slider x:Name="sliderCurrentBPM" Margin="20,0,0,0" Width="100" Minimum="60" Maximum="240" ValueChanged="sliderCurrentBPM_ValueChanged"/>
-                <Button  x:Name="goExternal" Content="GotFocus external" Height="50" Margin="10,0,0,0" Click="goExternal_Click" />
+                <Slider x:Name="sliderCurrentBPM" Margin="20,0,0,0" Width="105" Minimum="60" Maximum="240" ValueChanged="sliderCurrentBPM_ValueChanged"/>
             </StackPanel>
 
-            <MediaPlayerElement x:Name="mediaPlayerElement"
-                                       AutoPlay="False" Margin="5" HorizontalAlignment="Stretch" Height="300" AreTransportControlsEnabled="False"/>
-
             <!-- Sequencer -->
-            <StackPanel x:Name="sequencerTrack" Orientation="Horizontal" />
+            <StackPanel x:Name="sequencerTracks" Orientation="Horizontal" />
+            <!-- Sequencer Track 1 -->
+            <StackPanel x:Name="sequencerPanel1" Margin="10" Orientation="Vertical" >
+                <StackPanel x:Name="sequencerTrack0" Orientation="Horizontal" >
+                    <StackPanel x:Name="sequencerTrack0Slot0" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                        <Button x:Name="sequencerTrack0Slot0Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                        <CheckBox x:Name="sequencerTrack0Slot0Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                    </StackPanel>
+                    <StackPanel x:Name="sequencerTrack0Slot1" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                        <Button x:Name="sequencerTrack0Slot1Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                        <CheckBox x:Name="sequencerTrack0Slot1Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                    </StackPanel>
+                    <StackPanel x:Name="sequencerTrack0Slot2" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                        <Button x:Name="sequencerTrack0Slot2Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                        <CheckBox x:Name="sequencerTrack0Slot2Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                    </StackPanel>
+                    <StackPanel x:Name="sequencerTrack0Slot3" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                        <Button x:Name="sequencerTrack0Slot3Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                        <CheckBox x:Name="sequencerTrack0Slot3Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                    </StackPanel>
+                    <StackPanel x:Name="sequencerTrack0Slot4" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                        <Button x:Name="sequencerTrack0Slot4Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                        <CheckBox x:Name="sequencerTrack0Slot4Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                    </StackPanel>
+                    <StackPanel x:Name="sequencerTrack0Slot5" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                        <Button x:Name="sequencerTrack0Slot5Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                        <CheckBox x:Name="sequencerTrack0Slot5Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                    </StackPanel>
+                    <StackPanel x:Name="sequencerTrack0Slot6" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                        <Button x:Name="sequencerTrack0Slot6Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                        <CheckBox x:Name="sequencerTrack0Slot6Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                    </StackPanel>
+                    <StackPanel x:Name="sequencerTrack0Slot7" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                        <Button x:Name="sequencerTrack0Slot7Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                        <CheckBox x:Name="sequencerTrack0Slot7Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <!-- Sequencer Track 2 -->
+                <StackPanel x:Name="sequencerPanel2" Margin="10" Orientation="Vertical" >
+                    <StackPanel x:Name="sequencerTrack1" Orientation="Horizontal" >
+                        <StackPanel x:Name="sequencerTrack1Slot0" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                            <Button x:Name="sequencerTrack1Slot0Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                            <CheckBox x:Name="sequencerTrack1Slot0Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                        </StackPanel>
+                        <StackPanel x:Name="sequencerTrack1Slot1" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                            <Button x:Name="sequencerTrack1Slot1Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                            <CheckBox x:Name="sequencerTrack1Slot1Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                        </StackPanel>
+                        <StackPanel x:Name="sequencerTrack1Slot2" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                            <Button x:Name="sequencerTrack1Slot2Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                            <CheckBox x:Name="sequencerTrack1Slot2Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                        </StackPanel>
+                        <StackPanel x:Name="sequencerTrack1Slot3" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                            <Button x:Name="sequencerTrack1Slot3Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                            <CheckBox x:Name="sequencerTrack1Slot3Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                        </StackPanel>
+                        <StackPanel x:Name="sequencerTrack1Slot4" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                            <Button x:Name="sequencerTrack1Slot4Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                            <CheckBox x:Name="sequencerTrack1Slot4Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                        </StackPanel>
+                        <StackPanel x:Name="sequencerTrack1Slot5" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                            <Button x:Name="sequencerTrack1Slot5Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                            <CheckBox x:Name="sequencerTrack1Slot5Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                        </StackPanel>
+                        <StackPanel x:Name="sequencerTrack1Slot6" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                            <Button x:Name="sequencerTrack1Slot6Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                            <CheckBox x:Name="sequencerTrack1Slot6Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                        </StackPanel>
+                        <StackPanel x:Name="sequencerTrack1Slot7" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                            <Button x:Name="sequencerTrack1Slot7Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                            <CheckBox x:Name="sequencerTrack1Slot7Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+                        </StackPanel>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

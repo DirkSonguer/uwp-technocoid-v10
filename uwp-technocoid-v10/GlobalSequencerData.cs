@@ -10,14 +10,17 @@ namespace uwp_technocoid_v10
     /// <summary>
     /// This is a video item, representing one sequencer step.
     /// </summary>
-    class VideoItem
+    class SequencerSlot
     {
+        // Flag if the slot is active or not.
+        public bool active { get; set; }
+
         // MediaSource for the video. This will be handed to the MediaPlayers
         // to play.
         public Windows.Media.Core.MediaSource videoMediaSource { get; set; }
 
         // Thumbnail for the video. This will be shown on the controller UI.
-        public StorageItemThumbnail videoThumbnail { get; set; }
+        public StorageItemThumbnail thumbnail { get; set; }
 
         // Original file of the video. This is used when reloading all contents if
         // the media player is switched.
@@ -31,7 +34,7 @@ namespace uwp_technocoid_v10
     class SequencerTrack
     {
         // The video items in one track
-        public VideoItem[] videoItems = new VideoItem[12];
+        public SequencerSlot[] slots = new SequencerSlot[8];
     }
 
     /// <summary>
@@ -51,16 +54,20 @@ namespace uwp_technocoid_v10
         // Instance for the first track of the sequencer.
         // Currently we don't have more than one track, but this will
         // change in the future.
-        private SequencerTrack track1 = new SequencerTrack();
+        private SequencerTrack[] tracks = new SequencerTrack[2];
 
         /// <summary>
         /// Constructor.
         /// </summary>
         GlobalSequencerData()
         {
-            for (int i = 0; i < 12; i++)
+            tracks[0] = new SequencerTrack();
+            tracks[1] = new SequencerTrack();
+
+            for (int i = 0; i < 8; i++)
             {
-                track1.videoItems[i] = new VideoItem();
+                tracks[0].slots[i] = new SequencerSlot();
+                tracks[1].slots[i] = new SequencerSlot();
             }
         }
 
@@ -69,9 +76,9 @@ namespace uwp_technocoid_v10
         /// </summary>
         /// <param name="sequencerPosition">The position on the sequencer board to associate the video with.</param>
         /// <param name="newVideoItem">The video item to store.</param>
-        public void setVideoItemAtPosition(int sequencerPosition, VideoItem newVideoItem)
+        public void setSlotAtPosition(int sequencerTrack, int sequencerPosition, SequencerSlot newVideoItem)
         {
-            track1.videoItems[sequencerPosition] = newVideoItem;
+            tracks[sequencerTrack].slots[sequencerPosition] = newVideoItem;
         }
 
         /// <summary>
@@ -79,9 +86,9 @@ namespace uwp_technocoid_v10
         /// </summary>
         /// <param name="sequencerPosition">The position on the sequencer board to associate the video with.</param>
         /// <returns></returns>
-        public VideoItem getVideoItemForPosition(int sequencerPosition)
+        public SequencerSlot getSlotAtPosition(int sequencerTrack, int sequencerPosition)
         {
-            return track1.videoItems[sequencerPosition];
+            return tracks[sequencerTrack].slots[sequencerPosition];
         }
 
     }

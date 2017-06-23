@@ -96,7 +96,7 @@ namespace uwp_technocoid_v10
             await dispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
-                 if (this.currentSequencerPosition < 11)
+                 if (this.currentSequencerPosition < 7)
                  {
                      this.currentSequencerPosition += 1;
                  }
