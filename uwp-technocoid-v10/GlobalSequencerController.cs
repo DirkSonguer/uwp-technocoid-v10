@@ -75,12 +75,12 @@ namespace uwp_technocoid_v10
 
             if (isSequencerRunning)
             {
+                this.currentSequencerPosition = 0;
                 masterTimer = ThreadPoolTimer.CreatePeriodicTimer(SequencerMainLoop, this.currentBPMasTimeSpan);
             }
             else
             {
                 masterTimer.Cancel();
-                this.currentSequencerPosition = 0;
             }
         }
 

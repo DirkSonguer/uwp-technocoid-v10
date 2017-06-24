@@ -57,7 +57,7 @@ namespace uwp_technocoid_v10
         // Instance for the first track of the sequencer.
         // Currently we don't have more than one track, but this will
         // change in the future.
-        private SequencerTrack[] tracks = new SequencerTrack[2];
+        private SequencerTrack[] tracks = new SequencerTrack[4];
 
         /// <summary>
         /// Constructor.
@@ -66,11 +66,15 @@ namespace uwp_technocoid_v10
         {
             tracks[0] = new SequencerTrack();
             tracks[1] = new SequencerTrack();
+            tracks[2] = new SequencerTrack();
+            tracks[3] = new SequencerTrack();
 
             for (int i = 0; i < 8; i++)
             {
                 tracks[0].slots[i] = new SequencerSlot();
                 tracks[1].slots[i] = new SequencerSlot();
+                tracks[2].slots[i] = new SequencerSlot();
+                tracks[3].slots[i] = new SequencerSlot();
             }
         }
 

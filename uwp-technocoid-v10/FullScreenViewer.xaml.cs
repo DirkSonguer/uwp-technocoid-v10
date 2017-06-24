@@ -39,6 +39,9 @@ namespace uwp_technocoid_v10
 
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
+
+            mediaPlayerElementTrack0.MediaPlayer.IsMuted = true;
+            mediaPlayerElementTrack1.MediaPlayer.IsMuted = true;
         }
 
         /// <summary>
@@ -51,28 +54,22 @@ namespace uwp_technocoid_v10
             await this.globalEventHandlerInstance.playerDispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
-                 // Get the video item for the current sequencer position.
-                 SequencerSlot currentSlotItem = globalSequencerDataInstance.getSlotAtPosition(0, (int)currentSequencerPosition);
-
-                 // Check if the current step has a video in it.
-                 if ((currentSlotItem.videoMediaSource != null) && (currentSlotItem.active))
+                 for (int i = 0; i < 4; i++)
                  {
-                     // If so, then bind the video source to the video player and start playing the new source.
-                     mediaPlayerElementTrack0.MediaPlayer.Source = currentSlotItem.videoMediaSource;
-                     mediaPlayerElementTrack0.MediaPlayer.Play();
+                     MediaPlayerElement currentMediaElement = (MediaPlayerElement)this.FindName("mediaPlayerElementTrack" + i.ToString());
+
+                     // Get the video item for the current sequencer position.
+                     SequencerSlot currentSlotItem = globalSequencerDataInstance.getSlotAtPosition(i, (int)currentSequencerPosition);
+
+                     // Check if the current step has a video in it.
+                     if ((currentSlotItem.videoMediaSource != null) && (currentSlotItem.active))
+                     {
+                         // If so, then bind the video source to the video player and start playing the new source.
+                         currentMediaElement.MediaPlayer.Source = currentSlotItem.videoMediaSource;
+                         currentMediaElement.MediaPlayer.Play();
+                     }
+
                  }
-
-                 // Get the video item for the current sequencer position.
-                 currentSlotItem = globalSequencerDataInstance.getSlotAtPosition(1, (int)currentSequencerPosition);
-
-                 // Check if the current step has a video in it.
-                 if ((currentSlotItem.videoMediaSource != null) && (currentSlotItem.active))
-                 {
-                     // If so, then bind the video source to the video player and start playing the new source.
-                     mediaPlayerElementTrack1.MediaPlayer.Source = currentSlotItem.videoMediaSource;
-                     mediaPlayerElementTrack1.MediaPlayer.Play();
-                 }
-
              });
         }
 

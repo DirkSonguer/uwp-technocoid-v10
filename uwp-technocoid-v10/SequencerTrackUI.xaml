@@ -1,0 +1,49 @@
+﻿<UserControl
+    x:Class="uwp_technocoid_v10.SequencerTrackUI"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:uwp_technocoid_v10"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="150"
+    d:DesignWidth="920">
+
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <Slider x:Name="OpacitySlider" Margin="10,0,10,0" VerticalAlignment="Center" Width="50" Minimum="0" Maximum="100" Value="100" ValueChanged="ChangeOpacityForTrack"/>
+            <StackPanel x:Name="Slot0" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                <Button x:Name="Slot0Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                <CheckBox x:Name="Slot0Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+            </StackPanel>
+            <StackPanel x:Name="Slot1" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                <Button x:Name="Slot1Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                <CheckBox x:Name="Slot1Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+            </StackPanel>
+            <StackPanel x:Name="Slot2" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                <Button x:Name="Slot2Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                <CheckBox x:Name="Slot2Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+            </StackPanel>
+            <StackPanel x:Name="Slot3" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                <Button x:Name="Slot3Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                <CheckBox x:Name="Slot3Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+            </StackPanel>
+            <StackPanel x:Name="Slot4" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                <Button x:Name="Slot4Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                <CheckBox x:Name="Slot4Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+            </StackPanel>
+            <StackPanel x:Name="Slot5" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                <Button x:Name="Slot5Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                <CheckBox x:Name="Slot5Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+            </StackPanel>
+            <StackPanel x:Name="Slot6" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                <Button x:Name="Slot6Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                <CheckBox x:Name="Slot6Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+            </StackPanel>
+            <StackPanel x:Name="Slot7" Orientation="Vertical" Background="LightGray" Height="150" Width="105">
+                <Button x:Name="Slot7Button" Margin="0,10,0,0" Height="100" Width="95" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LoadNewVideoForSlot"/>
+                <CheckBox x:Name="Slot7Active" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" MinWidth="30" HorizontalContentAlignment="Left" MinHeight="30" Click="ActivateSlot"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
