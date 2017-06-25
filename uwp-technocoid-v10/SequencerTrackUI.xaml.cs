@@ -50,12 +50,14 @@ namespace uwp_technocoid_v10
         /// <param name="highlightState"></param>
         public void HightlightSlot(int highlightedSlot, bool highlightState)
         {
+            // Get the element to highlight
             StackPanel highlightedStackPanel = (StackPanel)this.FindName("Slot" + highlightedSlot.ToString());
 
+            // if the element should be highlighted, make it teal,
+            // otherwise make it light gray.
             if (highlightState)
             {
                 highlightedStackPanel.Background = new SolidColorBrush(Windows.UI.Colors.Teal);
-
             } else
             {
                 highlightedStackPanel.Background = new SolidColorBrush(Windows.UI.Colors.LightGray);
@@ -69,9 +71,14 @@ namespace uwp_technocoid_v10
         /// <param name="e"></param>
         private void ChangeOpacityForTrack(object sender, RangeBaseValueChangedEventArgs e)
         {
+            // Get parent element of the slider.
             var parentSlotStackPanel = (sender as Slider).Parent;
+
+            // Note that this will be null for the first time when the UI
+            // is being created.
             if (parentSlotStackPanel != null)
             {
+                // Retrieve slot and track names.
                 var parentTrackGrid = (parentSlotStackPanel as StackPanel).Parent;
                 var parentSequencerTrackUI = (parentTrackGrid as Grid).Parent;
                 var trackName = (parentSequencerTrackUI as SequencerTrackUI).Name;
@@ -81,6 +88,7 @@ namespace uwp_technocoid_v10
                 int selectedTrack = 0;
                 selectedTrack = int.Parse(trackName);
 
+                // Set the opacity for the track.
                 if (this.globalSequencerDataInstance != null)
                 {
                     this.globalSequencerDataInstance.setOpacityForTrack(selectedTrack, ((sender as Slider).Value / 100));
@@ -97,6 +105,7 @@ namespace uwp_technocoid_v10
         /// <param name="e">RoutedEventArgs.</param>
         private async void LoadNewVideoForSlot(object sender, RoutedEventArgs e)
         {
+            // Retrieve slot and track names.
             var parentSlotStackPanel = (sender as Button).Parent;
             var slotName = (parentSlotStackPanel as StackPanel).Name;
             var parentTrackStackPanel = (parentSlotStackPanel as StackPanel).Parent;
@@ -144,7 +153,6 @@ namespace uwp_technocoid_v10
                 BitmapImage image = new BitmapImage();
                 ImageBrush imagebrush = new ImageBrush();
                 image.SetSource(newSlotItem.thumbnail);
-                //                Button currentSequencerUIElement = (Button)this.FindName("sequencerTrack" + senderElementTrack + "Slot" + senderElementSlot + "Button");
                 imagebrush.ImageSource = image;
                 (sender as Button).Background = imagebrush;
             }
@@ -159,6 +167,7 @@ namespace uwp_technocoid_v10
         /// <param name="e">RoutedEventArgs.</param>
         private void ActivateSlot(object sender, RoutedEventArgs e)
         {
+            // Retrieve slot and track names.
             var parentSlotStackPanel = (sender as CheckBox).Parent;
             var slotName = (parentSlotStackPanel as StackPanel).Name;
             var parentTrackStackPanel = (parentSlotStackPanel as StackPanel).Parent;
@@ -181,6 +190,38 @@ namespace uwp_technocoid_v10
             slotItemForUpdate.active = (bool)(sender as CheckBox).IsChecked;
             this.globalSequencerDataInstance.setSlotAtPosition(selectedTrack, selectedSlot, slotItemForUpdate);
 
+        }
+
+        /// <summary>
+        /// TODO!
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ActivateAllSlots(object sender, RoutedEventArgs e)
+        {
+            // Iterate through the UI elements and activate the checkboxes.
+            for (int i = 0; i < 8; i++)
+            {
+                CheckBox slotActivateCheckBoxElement = (CheckBox)this.FindName("Slot" + i.ToString() + "Active");
+                slotActivateCheckBoxElement.IsChecked = true;
+                this.ActivateSlot(slotActivateCheckBoxElement, null);
+            }
+        }
+
+        /// <summary>
+        /// TODO!
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DeactivateAllSlots(object sender, RoutedEventArgs e)
+        {
+            // Iterate through the UI elements and deactivate the checkboxes.
+            for (int i = 0; i < 8; i++)
+            {
+                CheckBox slotActivateCheckBoxElement = (CheckBox)this.FindName("Slot" + i.ToString() + "Active");
+                slotActivateCheckBoxElement.IsChecked = false;
+                this.ActivateSlot(slotActivateCheckBoxElement, null);
+            }
         }
     }
 }

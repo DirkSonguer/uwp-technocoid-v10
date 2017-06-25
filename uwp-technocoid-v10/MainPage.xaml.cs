@@ -44,9 +44,6 @@ namespace uwp_technocoid_v10
 
             // Initially create the UI.
             CreateUI();
-
-            // Make sure we update the UI when the main window is resized.
-            Window.Current.SizeChanged += UpdateUI;
         }
 
         /// <summary>
@@ -90,28 +87,6 @@ namespace uwp_technocoid_v10
             // Activate and show the new window.
             bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
             statusTextControl.Text = "External view created";
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void UpdateUI(object sender, Windows.UI.Core.WindowSizeChangedEventArgs e)
-        {
-            /*
-            var newWindowBounds = ApplicationView.GetForCurrentView().VisibleBounds;
-            var newWindowScaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
-            var newWindowSize = new Size(newWindowBounds.Width * newWindowScaleFactor, newWindowBounds.Height * newWindowScaleFactor);
-            var newButtonSize = Convert.ToInt32(newWindowSize.Width / (12 * newWindowScaleFactor));
-
-            for (int i = 0; i < 12; i++)
-            {
-                Button addedButtonElement = (Button)this.FindName("_" + i.ToString());
-                addedButtonElement.Width = newButtonSize;
-                addedButtonElement.Height = newButtonSize;
-            }
-            */
         }
 
         /// <summary>
