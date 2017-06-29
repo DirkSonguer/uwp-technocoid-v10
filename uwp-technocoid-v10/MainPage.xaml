@@ -24,9 +24,8 @@
 
             <!-- player controls -->
             <StackPanel Orientation="Horizontal">
-                <Button  x:Name="startSequencer" Width="50" Height="50" Margin="10,0,0,0" Click="startSequencer_Click" Content="&#xE102;" FontFamily="Segoe UI Symbol"/>
-                <TextBox x:Name="textCurrentBPM" Margin="20,0,0,0" TextWrapping="Wrap" Text="TextBox" TextChanged="textCurrentBPM_TextChanged"/>
-                <Slider x:Name="sliderCurrentBPM" Margin="20,0,0,0" Width="105" Minimum="60" Maximum="240" ValueChanged="sliderCurrentBPM_ValueChanged"/>
+                <local:SequencerPlayerUI x:Name="sequencerPlayerControls"/>
+                <local:SequencerBpmUI x:Name="sequencerBpmControls"/>
             </StackPanel>
             <local:SequencerTrackUI x:Name="sequencerTrack0" Margin="0,10,0,0"/>
             <local:SequencerTrackUI x:Name="sequencerTrack1" Margin="0,10,0,0"/>

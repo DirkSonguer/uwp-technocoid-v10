@@ -1,0 +1,20 @@
+﻿<UserControl
+    x:Class="uwp_technocoid_v10.SequencerBpmUI"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:uwp_technocoid_v10"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="50"
+    d:DesignWidth="400">
+
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="currentBpmInput" Margin="20,0,0,0" TextWrapping="Wrap" Text="TextBox" TextChanged="currentBpmChanged"/>
+            <Slider x:Name="currentBpmSlider" Margin="20,0,0,0" Width="105" Minimum="60" Maximum="240"/>
+            <Button x:Name="halfCurrentBpmButton" Margin="10,0,0,0" Width="50" Content="1/2" Click="doubleCurrentBpm" />
+            <Button x:Name="doubleCurrentBpmButton" Margin="10,0,0,0" Width="50" Content="*2" Click="halfCurrentBpm" />
+        </StackPanel>
+    </Grid>
+</UserControl>

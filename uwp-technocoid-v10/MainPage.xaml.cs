@@ -25,8 +25,6 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
-        private long[] bpmTapTimer = new long[5];
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -40,93 +38,13 @@ namespace uwp_technocoid_v10
             // Get an instance to the event handler and subscribe to the SequencerPositionChanged event.
             this.globalEventHandlerInstance = GlobalEventHandler.GetInstance();
             this.globalEventHandlerInstance.SequencerPositionChanged += this.SequencerTrigger;
+            this.globalEventHandlerInstance.CurrentlyPlayingChanged += this.SequencerPlayingChanged;
 
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
-            for (int i = 0; i < 5; i++)
-            {
-                this.bpmTapTimer[i] = 0;
-            }
-
-            CoreWindow.GetForCurrentThread().KeyDown += Keyboard_KeyDown;
-
             // Initially create the UI.
             CreateUI();
-        }
-
-        /// <summary>
-        /// This is a very quick & dirty implementation of a tap-to-BPM.
-        /// If the user taps the space bar, the BPM will be calculated based
-        /// on their tap speed.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void Keyboard_KeyDown(CoreWindow sender, KeyEventArgs args)
-        {
-            // Only react to the space bar
-            if (args.VirtualKey.ToString() == "Space")
-            {
-                // Check if the last inpout was longer tham 5 seconds ago.
-                if (DateTime.Now.Ticks > (this.bpmTapTimer[0] + 50000000))
-                {
-                    // If so, reset the measurements to get a clean average.
-                    for (int i = 0; i < 5; i++)
-                    {
-                        this.bpmTapTimer[i] = 0;
-                    }
-                }
-
-                // If we have more than 4 measure points, roll over.
-                if (this.bpmTapTimer[4] > 0)
-                {
-                    for (int i = 1; i < 5; i++)
-                    {
-                        this.bpmTapTimer[i-1] = this.bpmTapTimer[i];
-                    }
-                    this.bpmTapTimer[4] = 0;
-                }
-
-                // Store the current time in the most recent bpm timer slot.
-                bool bpmCounterUpdated = false;
-                for (int i = 0; i < 5; i++)
-                {
-                    if (this.bpmTapTimer[i] == 0)
-                    {
-                        this.bpmTapTimer[i] = DateTime.Now.Ticks;
-                        bpmCounterUpdated = true;
-                        break;
-                    }
-                }
-
-                // Calculate the average bpm based on the tap distances.
-                if (bpmCounterUpdated)
-                {
-                    double bpmAverage = 0.0;
-                    for (int i = 0; i < 4; i++)
-                    {
-                        if (this.bpmTapTimer[i + 1] > 0)
-                        {
-                            long tapDistance = this.bpmTapTimer[i + 1] - this.bpmTapTimer[i];
-                            if (i > 0)
-                            {
-                                bpmAverage = (bpmAverage + tapDistance) / 2;
-                            } else
-                            {
-                                bpmAverage = tapDistance;
-                            }
-                        }
-                    }
-
-                    // If the average could be calculated, set it in the UI.
-                    if (bpmAverage > 0)
-                    {
-                        bpmAverage = bpmAverage / 10000;
-                        int newBPM = Convert.ToInt32(60000 / bpmAverage);
-                        textCurrentBPM.Text = newBPM.ToString();
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -135,10 +53,6 @@ namespace uwp_technocoid_v10
         /// </summary>
         public async void CreateUI()
         {
-            // Set the initial BPM to 60. Note that if we set the slider, we will also set the
-            // Text box.
-            sliderCurrentBPM.Value = 60;
-
             // Create a new new core application view.
             // this will be the external windows to host the media player.
             CoreApplicationView newView = CoreApplication.CreateNewView();
@@ -200,42 +114,26 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// TODO!
+        /// The sequencer triggered a step progression.
+        /// CHange the UI accordingly.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void startSequencer_Click(object sender, RoutedEventArgs e)
+        /// <param name="currentSequencerPosition">Current position slot as int.</param>
+        /// <param name="e">PropertyChangedEventArgs.</param>
+        private void SequencerPlayingChanged(object currentSequencerPlaying, PropertyChangedEventArgs e)
         {
-            if ("\uE102" == startSequencer.Content.ToString())
+            statusTextControl.Text = "Sequencer playing is " + currentSequencerPlaying.ToString();
+
+            if (!(bool)currentSequencerPlaying)
             {
-                startSequencer.Content = "\uE103";
-                globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
-            }
-            else
-            {
-                startSequencer.Content = "\uE102";
-                globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
+                for (int i = 0; i < 8; i++)
+                {
+                    sequencerTrack0.HightlightSlot(i, false);
+                    sequencerTrack1.HightlightSlot(i, false);
+                    sequencerTrack2.HightlightSlot(i, false);
+                    sequencerTrack3.HightlightSlot(i, false);
+                }
             }
         }
 
-        /// <summary>
-        /// Change the BPM counter via the slider.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void sliderCurrentBPM_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            textCurrentBPM.Text = (sender as Slider).Value.ToString();
-        }
-
-        /// <summary>
-        /// Change the BPM counter via the text input box.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void textCurrentBPM_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            this.globalSequencerControllerInstance.UpdateBPM(int.Parse(textCurrentBPM.Text));
-        }
     }
 }
