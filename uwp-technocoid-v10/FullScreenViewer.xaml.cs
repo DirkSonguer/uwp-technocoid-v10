@@ -40,8 +40,11 @@ namespace uwp_technocoid_v10
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
+            // Mute all media players.
             mediaPlayerElementTrack0.MediaPlayer.IsMuted = true;
             mediaPlayerElementTrack1.MediaPlayer.IsMuted = true;
+            mediaPlayerElementTrack2.MediaPlayer.IsMuted = true;
+            mediaPlayerElementTrack3.MediaPlayer.IsMuted = true;
         }
 
         /// <summary>
@@ -51,11 +54,14 @@ namespace uwp_technocoid_v10
         /// <param name="e">PropertyChangedEventArgs.</param>
         private async void SequencerTrigger(object currentSequencerPosition, PropertyChangedEventArgs e)
         {
+            // Get the correct thread for the media player UI.
             await this.globalEventHandlerInstance.playerDispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
+                 // Iterate through all 4 media players.
                  for (int i = 0; i < 4; i++)
                  {
+                     // Get the media player element for the current track.
                      MediaPlayerElement currentMediaElement = (MediaPlayerElement)this.FindName("mediaPlayerElementTrack" + i.ToString());
 
                      // Get the video item for the current sequencer position.
@@ -68,7 +74,6 @@ namespace uwp_technocoid_v10
                          currentMediaElement.MediaPlayer.Source = currentSlotItem.videoMediaSource;
                          currentMediaElement.MediaPlayer.Play();
                      }
-
                  }
              });
         }
@@ -81,19 +86,12 @@ namespace uwp_technocoid_v10
         /// <param name="e">PropertyChangedEventArgs.</param>
         private async void StartSequencer(object isCurrentlyPlaying, PropertyChangedEventArgs e)
         {
+            // Get the correct thread for the media player UI.
             await this.globalEventHandlerInstance.playerDispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
-                 if ((bool)isCurrentlyPlaying)
-                 {
-                     mediaPlayerElementTrack0.MediaPlayer.Play();
-                     mediaPlayerElementTrack1.MediaPlayer.Play();
-                 }
-                 else
-                 {
-                     mediaPlayerElementTrack0.MediaPlayer.Pause();
-                     mediaPlayerElementTrack1.MediaPlayer.Pause();
-                 }
+                 // Originally we started / stopped the players here,
+                 // however this is done via the sequencer triggers now.
              });
         }
 
@@ -104,11 +102,14 @@ namespace uwp_technocoid_v10
         /// <param name="e">PropertyChangedEventArgs.</param>
         private async void ChangeOpacity(object sequencerTrack, PropertyChangedEventArgs e)
         {
+            // Get the track to change opacity for.
             double newTrackOpacity = this.globalSequencerDataInstance.getOpacityForTrack((int)sequencerTrack);
 
+            // Get the correct thread for the media player UI.
             await this.globalEventHandlerInstance.playerDispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
+                 // Get the media player for the respective track and change its opacity.
                  MediaPlayerElement currentMediaPlayerUIElement = (MediaPlayerElement)this.FindName("mediaPlayerElementTrack" + (int)sequencerTrack);
                  if (currentMediaPlayerUIElement != null)
                  {

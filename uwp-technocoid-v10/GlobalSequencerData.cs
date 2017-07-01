@@ -98,6 +98,11 @@ namespace uwp_technocoid_v10
             return tracks[sequencerTrack].slots[sequencerPosition];
         }
 
+        /// <summary>
+        /// Set the opacity for the given track.
+        /// </summary>
+        /// <param name="sequencerTrack">The track to change the opacity for</param>
+        /// <param name="newTrackOpacity">The new opacity value</param>
         public void setOpacityForTrack(int sequencerTrack, double newTrackOpacity)
         {
             if ((newTrackOpacity >= 0.0) && (newTrackOpacity <= 1.0)) {
@@ -105,6 +110,11 @@ namespace uwp_technocoid_v10
             }
         }
 
+        /// <summary>
+        /// Get the opacity for the given track.
+        /// </summary>
+        /// <param name="sequencerTrack">Track to get the opacity value for</param>
+        /// <returns></returns>
         public double getOpacityForTrack(int sequencerTrack)
         {
             return tracks[sequencerTrack].opacity;

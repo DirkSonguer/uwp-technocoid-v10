@@ -13,8 +13,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace uwp_technocoid_v10
 {
     public sealed partial class SequencerPlayerUI : UserControl
@@ -24,6 +22,9 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SequencerPlayerUI()
         {
             this.InitializeComponent();
@@ -39,10 +40,11 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// TODO!
+        /// User pressed the play button.
+        /// Start / stop the sequencer and change the button icon accordingly.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The button for the play functionality as Button.</param>
+        /// <param name="e">RoutedEventArgs</param>
         private void startSequencer(object sender, RoutedEventArgs e)
         {
             if ("\uE102" == startSequencerButton.Content.ToString())
@@ -57,6 +59,12 @@ namespace uwp_technocoid_v10
             }
         }
 
+        /// <summary>
+        /// User pressed reset button.
+        /// This will reset the sequencer, effectively restarting it from position 0.
+        /// </summary>
+        /// <param name="sender">The button for the reset functionality as Button.</param>
+        /// <param name="e">RoutedEventArgs</param>
         private void resetSequencer(object sender, RoutedEventArgs e)
         {
             this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);

@@ -7,14 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="50"
-    d:DesignWidth="400">
+    d:DesignWidth="480">
 
     <Grid>
         <StackPanel Orientation="Horizontal">
-            <TextBox x:Name="currentBpmInput" Margin="20,0,0,0" TextWrapping="Wrap" Text="TextBox" TextChanged="currentBpmChanged"/>
-            <Slider x:Name="currentBpmSlider" Margin="20,0,0,0" Width="105" Minimum="60" Maximum="240"/>
-            <Button x:Name="halfCurrentBpmButton" Margin="10,0,0,0" Width="50" Content="1/2" Click="doubleCurrentBpm" />
-            <Button x:Name="doubleCurrentBpmButton" Margin="10,0,0,0" Width="50" Content="*2" Click="halfCurrentBpm" />
+            <TextBox x:Name="currentBpmInput" Margin="20,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap" Text="TextBox" TextChanged="currentBpmChanged"/>
+            <Button x:Name="minusTenBpmButton" Margin="10,0,0,0" Width="50" Content="-10" Click="MinusTenBpm" />
+            <Slider x:Name="currentBpmSlider" Margin="20,0,0,0" VerticalAlignment="Center" Width="105" Minimum="60" Maximum="240"/>
+            <Button x:Name="plusTenBpmButton" Margin="10,0,0,0" Width="50" Content="+10" Click="PlusTenBpm" />
+            <Button x:Name="halfCurrentBpmButton" Margin="10,0,0,0" Width="50" Content="1/2" Click="HalfCurrentBpm" />
+            <Button x:Name="doubleCurrentBpmButton" Margin="10,0,0,0" Width="50" Content="*2" Click="DoubleCurrentBpm" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -19,7 +19,7 @@
 
             <!-- debug text -->
             <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="statusTextControl" TextWrapping="Wrap" Text="DebugText"/>
+                <TextBlock x:Name="statusTextControl" Margin="10,10,0,10" TextWrapping="Wrap" Text="DebugText"/>
             </StackPanel>
 
             <!-- player controls -->

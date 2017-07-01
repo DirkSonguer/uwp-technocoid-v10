@@ -114,15 +114,16 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// The sequencer triggered a step progression.
+        /// The sequencer has been started or stopped.
         /// CHange the UI accordingly.
         /// </summary>
-        /// <param name="currentSequencerPosition">Current position slot as int.</param>
+        /// <param name="currentSequencerPosition">Bool to indicate if sequencer has been started or stopped.</param>
         /// <param name="e">PropertyChangedEventArgs.</param>
         private void SequencerPlayingChanged(object currentSequencerPlaying, PropertyChangedEventArgs e)
         {
             statusTextControl.Text = "Sequencer playing is " + currentSequencerPlaying.ToString();
 
+            // If the sequencer has been stopped, clear all track highlights.
             if (!(bool)currentSequencerPlaying)
             {
                 for (int i = 0; i < 8; i++)

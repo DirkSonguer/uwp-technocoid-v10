@@ -14,8 +14,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace uwp_technocoid_v10
 {
     public sealed partial class SequencerBpmUI : UserControl
@@ -25,8 +23,12 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
+        // Temp cache for the user tap input.
         private long[] bpmTapTimer = new long[5];
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SequencerBpmUI()
         {
             this.InitializeComponent();
@@ -40,11 +42,13 @@ namespace uwp_technocoid_v10
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
+            // Clear out the tap cache.
             for (int i = 0; i < 5; i++)
             {
                 this.bpmTapTimer[i] = 0;
             }
 
+            // Register for the keyboard input event to register taps.
             CoreWindow.GetForCurrentThread().KeyDown += Keyboard_KeyDown;
 
             // Set the initial BPM to 60.
@@ -60,7 +64,7 @@ namespace uwp_technocoid_v10
         /// <param name="args"></param>
         private void Keyboard_KeyDown(CoreWindow sender, KeyEventArgs args)
         {
-            // Only react to the space bar
+            // Only react to the space bar.
             if (args.VirtualKey.ToString() == "Space")
             {
                 // Check if the last inpout was longer tham 5 seconds ago.
@@ -129,45 +133,93 @@ namespace uwp_technocoid_v10
         /// <summary>
         /// Change the BPM counter via the text input box.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The text input object as TextBox</param>
+        /// <param name="e">TextChangedEventArgs</param>
         private void currentBpmChanged(object sender, TextChangedEventArgs e)
         {
+            // Use try / catch to make sure the user entered a number.
             try
             {
+                // Convert the input to a number and update the BPM for the sequencer.
                 this.globalSequencerControllerInstance.UpdateBPM(int.Parse(currentBpmInput.Text));
                 currentBpmSlider.Value = int.Parse(currentBpmInput.Text);
             }
             catch (Exception ex)
             {
-
+                // User did not enter a valid number.
             }
         }
 
         /// <summary>
-        /// 
+        /// Button to half the current BPM speed.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void halfCurrentBpm(object sender, RoutedEventArgs e)
+        /// <param name="sender">Button object</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void HalfCurrentBpm(object sender, RoutedEventArgs e)
         {
+            // Convert and set the BPM. Note that we just set the TextBox value,
+            // which will set the sequencer BPM.
             int currentBpm = int.Parse(currentBpmInput.Text);
-            currentBpm *= 2;
-            currentBpmInput.Text = currentBpm.ToString();
-            currentBpmSlider.Value = currentBpm;
+            if (currentBpm > 119)
+            {
+                currentBpm = currentBpm / 2;
+                currentBpmInput.Text = currentBpm.ToString();
+                currentBpmSlider.Value = currentBpm;
+            }
         }
 
         /// <summary>
-        /// 
+        /// Button to double the current BPM speed.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void doubleCurrentBpm(object sender, RoutedEventArgs e)
+        /// <param name="sender">Button object</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void DoubleCurrentBpm(object sender, RoutedEventArgs e)
         {
+            // Convert and set the BPM. Note that we just set the TextBox value,
+            // which will set the sequencer BPM.
             int currentBpm = int.Parse(currentBpmInput.Text);
-            currentBpm = currentBpm / 2;
-            currentBpmInput.Text = currentBpm.ToString();
-            currentBpmSlider.Value = currentBpm;
+            if (currentBpm < 121)
+            {
+                currentBpm *= 2;
+                currentBpmInput.Text = currentBpm.ToString();
+                currentBpmSlider.Value = currentBpm;
+            }
+        }
+
+        /// <summary>
+        /// Button to decrease BPM speed by ten.
+        /// </summary>
+        /// <param name="sender">Button object</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void MinusTenBpm(object sender, RoutedEventArgs e)
+        {
+            // Convert and set the BPM. Note that we just set the TextBox value,
+            // which will set the sequencer BPM.
+            int currentBpm = int.Parse(currentBpmInput.Text);
+            if (currentBpm > 69)
+            {
+                currentBpm -= 10;
+                currentBpmInput.Text = currentBpm.ToString();
+                currentBpmSlider.Value = currentBpm;
+            }
+        }
+
+        /// <summary>
+        /// Button to increase BPM speed by ten.
+        /// </summary>
+        /// <param name="sender">Button object</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void PlusTenBpm(object sender, RoutedEventArgs e)
+        {
+            // Convert and set the BPM. Note that we just set the TextBox value,
+            // which will set the sequencer BPM.
+            int currentBpm = int.Parse(currentBpmInput.Text);
+            if (currentBpm < 231)
+            {
+                currentBpm += 10;
+                currentBpmInput.Text = currentBpm.ToString();
+                currentBpmSlider.Value = currentBpm;
+            }
         }
     }
 }

@@ -18,8 +18,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace uwp_technocoid_v10
 {
     public sealed partial class SequencerTrackUI : UserControl
@@ -29,6 +27,9 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SequencerTrackUI()
         {
             this.InitializeComponent();
@@ -44,10 +45,10 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// TODO!
+        /// Highlight the given slot in the track UI.
         /// </summary>
-        /// <param name="highlightedSlot"></param>
-        /// <param name="highlightState"></param>
+        /// <param name="highlightedSlot">ID of the slot to highlight</param>
+        /// <param name="highlightState">Bool flag if the highlicht should be active or nor highlighted</param>
         public void HightlightSlot(int highlightedSlot, bool highlightState)
         {
             // Get the element to highlight
@@ -67,8 +68,8 @@ namespace uwp_technocoid_v10
         /// <summary>
         /// Change the opacity of the player for the video player.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Object for the opacity slider as Slider</param>
+        /// <param name="e">RangeBaseValueChangedEventArgs</param>
         private void ChangeOpacityForTrack(object sender, RangeBaseValueChangedEventArgs e)
         {
             // Get parent element of the slider.
@@ -193,10 +194,10 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// TODO!
+        /// Button to activate all slots in the current track.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Button object for event as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
         private void ActivateAllSlots(object sender, RoutedEventArgs e)
         {
             // Iterate through the UI elements and activate the checkboxes.
@@ -209,10 +210,10 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// TODO!
+        /// Button to deactivate all slots in the current track.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Button object for event as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
         private void DeactivateAllSlots(object sender, RoutedEventArgs e)
         {
             // Iterate through the UI elements and deactivate the checkboxes.
