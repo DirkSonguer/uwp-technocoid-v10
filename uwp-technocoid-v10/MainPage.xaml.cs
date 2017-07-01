@@ -135,6 +135,5 @@ namespace uwp_technocoid_v10
                 }
             }
         }
-
     }
 }

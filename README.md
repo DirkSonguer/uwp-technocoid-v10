@@ -12,6 +12,28 @@ Contact: dirk@songuer.de
 Link: https://github.com/DirkSonguer/uwp-technocoid-v10
 
 
+# Manual
+
+Build and run with Visual Studio 2017.
+
+- Click / tap on a slot to load a video.
+- Use checkboxes under each slot to activate them.
+- Hit the play button to start the sequencer.
+- Activated slots with videos will be played in the player window.
+
+- The Reset button (next to play) will reset the step counter to 0.
+- Tap the space bar on each beat to set the BPM.
+- Press left / right to de- / increase the BPM count by 10.
+- Press down / up to halve / double the BPM count.
+
+
+# To Do
+
+- Make the UI look good.
+- The whole thing is slow and stutters / flickers. Maybe I'll fix that.
+- Add an option de- / activate Stretch="UniformToFill" to the UI.
+
+
 # History
 
 Technocoid was a side project of mine a couple of years ago (2002 or something like that).

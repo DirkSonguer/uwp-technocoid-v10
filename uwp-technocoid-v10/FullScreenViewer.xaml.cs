@@ -15,6 +15,9 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
+        // Cache to hold the currently playing video for each sequencer track (= video channel).
+        String[] currentlyActiveVideoFile = new String[4];
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -40,11 +43,15 @@ namespace uwp_technocoid_v10
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
-            // Mute all media players.
+            // Mute and elevate all media players.
             mediaPlayerElementTrack0.MediaPlayer.IsMuted = true;
+            mediaPlayerElementTrack0.MediaPlayer.RealTimePlayback = true;
             mediaPlayerElementTrack1.MediaPlayer.IsMuted = true;
+            mediaPlayerElementTrack1.MediaPlayer.RealTimePlayback = true;
             mediaPlayerElementTrack2.MediaPlayer.IsMuted = true;
+            mediaPlayerElementTrack2.MediaPlayer.RealTimePlayback = true;
             mediaPlayerElementTrack3.MediaPlayer.IsMuted = true;
+            mediaPlayerElementTrack3.MediaPlayer.RealTimePlayback = true;
         }
 
         /// <summary>
@@ -70,9 +77,20 @@ namespace uwp_technocoid_v10
                      // Check if the current step has a video in it.
                      if ((currentSlotItem.videoMediaSource != null) && (currentSlotItem.active))
                      {
-                         // If so, then bind the video source to the video player and start playing the new source.
-                         currentMediaElement.MediaPlayer.Source = currentSlotItem.videoMediaSource;
-                         currentMediaElement.MediaPlayer.Play();
+                         // CHeck if the video in the next step is another video than the one currently playing.
+                         if ((this.currentlyActiveVideoFile[i] == null) || (this.currentlyActiveVideoFile[i] != currentSlotItem.videoFile.Name))
+                         {
+                             // If so, then bind the video source to the video player and start playing the new source.
+                             currentMediaElement.MediaPlayer.Source = currentSlotItem.videoMediaSource;
+                             currentMediaElement.MediaPlayer.Play();
+                             this.currentlyActiveVideoFile[i] = currentSlotItem.videoFile.Name;
+                         }
+                         else
+                         {
+                             // If it's the same video, just reset the video position and start playing.
+                             currentMediaElement.MediaPlayer.PlaybackSession.Position = TimeSpan.Zero;
+                             currentMediaElement.MediaPlayer.Play();
+                         }
                      }
                  }
              });
