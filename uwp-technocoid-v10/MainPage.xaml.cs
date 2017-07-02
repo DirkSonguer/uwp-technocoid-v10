@@ -12,6 +12,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Core;
 using Windows.ApplicationModel.Core;
 using System.ComponentModel;
+using Windows.Foundation.Metadata;
 
 namespace uwp_technocoid_v10
 {

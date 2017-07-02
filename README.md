@@ -14,10 +14,11 @@ Link: https://github.com/DirkSonguer/uwp-technocoid-v10
 
 # Manual
 
-Build and run with Visual Studio 2017.
+Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't test it.
 
 - Click / tap on a slot to load a video.
 - Use checkboxes under each slot to activate them.
+- Adjust the opacity for the respective track.
 - Hit the play button to start the sequencer.
 - Activated slots with videos will be played in the player window.
 - The Reset button (next to play) will reset the step counter to 0.
@@ -29,10 +30,13 @@ Build and run with Visual Studio 2017.
 # To Do
 
 - MIDI input.
-- Make the UI look good.
+- Make the UI look good. Maybe similar to a NI TRAKTOR KONTROL F1 or D2?
+- Fullscreen for player window.
 - The whole thing is slow and stutters / flickers. Maybe I'll fix that.
 - Add an option de- / activate Stretch="UniformToFill" to the UI.
-- Maybe a slider for video playback speed?
+- Slider for video playback speed for each track?
+- Effects? https://code.msdn.microsoft.com/windowsapps/media-extensions-sample-7b466096
+- Webcam support?
 
 
 # Screenshots
@@ -42,13 +46,13 @@ Build and run with Visual Studio 2017.
 # History
 
 Technocoid was a side project of mine a couple of years ago (2002 or something like that).
-It was a simple VJ tool to experiment with realtime graphics (it was OpenGL based), input
-(it supported MIDI and some game controllers), and UI. And of course to have a tool to do
-VJ gigs. I stopped developing it when I discovered Neon and later [Neon v2](http://neonv2.com/).
+It was a simple VJ tool to experiment with realtime OpenGL based graphics, input (MIDI and
+some game controllers were supported), and UI. And of course to have a tool to do VJ gigs.
+I stopped developing it when I discovered Neon and later [Neon v2](http://neonv2.com/).
 
 Recently I found myself searching for a simple VJ tool that acted a bit like a video step
 sequencer, much like Neon did, but I wasn't able to find one. Well, to be honest I didn't
-look that long as I figured it would be a nice project to get back into Windows apps and
+look that well as I figured it would be a nice project to get back into Windows apps and
 check out UWP a little bit.
 
 

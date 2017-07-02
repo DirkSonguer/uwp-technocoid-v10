@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 
@@ -24,6 +25,9 @@ namespace uwp_technocoid_v10
         public FullScreenViewer()
         {
             this.InitializeComponent();
+
+            // Hide the standard title bar.
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 
             // Get an instance to the sequencer controller.
             this.globalSequencerControllerInstance = GlobalSequencerController.GetInstance();
