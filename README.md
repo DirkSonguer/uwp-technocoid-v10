@@ -17,7 +17,7 @@ Link: https://github.com/DirkSonguer/uwp-technocoid-v10
 Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't test it.
 
 - Click / tap on a slot to load a video.
-- Use checkboxes under each slot to activate them.
+- Use activator under each slot to activate them.
 - Adjust the opacity for the respective track.
 - Hit the play button to start the sequencer.
 - Activated slots with videos will be played in the player window.
@@ -26,12 +26,17 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 - Press left / right to de- / increase the BPM count by 10.
 - Press down / up to halve / double the BPM count.
 
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_intro1.png "Technocoid Intro 1")
+
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_intro2.png "Technocoid Intro 2")
+
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_intro3.png "Technocoid Intro 3")
+
 
 # To Do
 
 - MIDI input.
-- Make the UI look good. Maybe similar to a NI TRAKTOR KONTROL F1 or D2?
-- Fullscreen for player window.
+- Fullscreen option for player window.
 - The whole thing is slow and stutters / flickers. Maybe I'll fix that.
 - Add an option de- / activate Stretch="UniformToFill" to the UI.
 - Slider for video playback speed for each track?
@@ -56,8 +61,9 @@ look that well as I figured it would be a nice project to get back into Windows 
 check out UWP a little bit.
 
 
-# Used
+# Used in Development
 
-- Microsoft Visual Studio 2017: https://www.visualstudio.com/
-
-Tested on Windows 10 Creators Update.
+- Microsoft Visual Studio 2017: https://www.visualstudio.com/.
+- Tested on Windows 10 Creators Update.
+- Developed mostly while listening to https://www.twitch.tv/lost_in_house.
+- Tested during development with videos by https://twitter.com/TatsuyaBot.

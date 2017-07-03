@@ -9,6 +9,7 @@ using Windows.Media.Core;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -58,10 +59,11 @@ namespace uwp_technocoid_v10
             // otherwise make it light gray.
             if (highlightState)
             {
-                highlightedStackPanel.Background = new SolidColorBrush(Windows.UI.Colors.Teal);
-            } else
+                highlightedStackPanel.Background = new SolidColorBrush(Color.FromArgb(155, 0, 120, 215));
+            }
+            else
             {
-                highlightedStackPanel.Background = new SolidColorBrush(Windows.UI.Colors.LightGray);
+                highlightedStackPanel.Background = new SolidColorBrush(Windows.UI.Colors.Transparent);
             }
         }
 
@@ -169,7 +171,7 @@ namespace uwp_technocoid_v10
         private void ActivateSlot(object sender, RoutedEventArgs e)
         {
             // Retrieve slot and track names.
-            var parentSlotStackPanel = (sender as CheckBox).Parent;
+            var parentSlotStackPanel = (sender as Button).Parent;
             var slotName = (parentSlotStackPanel as StackPanel).Name;
             var parentTrackStackPanel = (parentSlotStackPanel as StackPanel).Parent;
             var parentTrackGrid = (parentTrackStackPanel as StackPanel).Parent;
@@ -188,9 +190,17 @@ namespace uwp_technocoid_v10
 
             // Get the respective item, update the active state and store it back again.
             SequencerSlot slotItemForUpdate = this.globalSequencerDataInstance.getSlotAtPosition(selectedTrack, selectedSlot);
-            slotItemForUpdate.active = (bool)(sender as CheckBox).IsChecked;
+            slotItemForUpdate.active = !slotItemForUpdate.active;
             this.globalSequencerDataInstance.setSlotAtPosition(selectedTrack, selectedSlot, slotItemForUpdate);
 
+            if (slotItemForUpdate.active)
+            {
+                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
+            }
+            else
+            {
+                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+            }
         }
 
         /// <summary>
@@ -200,12 +210,28 @@ namespace uwp_technocoid_v10
         /// <param name="e">RoutedEventArgs</param>
         private void ActivateAllSlots(object sender, RoutedEventArgs e)
         {
+            // Retrieve track name.
+            var parentStackPanel = (sender as Button).Parent;
+            var parentTrackStackPanel = (parentStackPanel as StackPanel).Parent;
+            var parentTrackGrid = (parentTrackStackPanel as StackPanel).Parent;
+            var parentSequencerTrackUI = (parentTrackGrid as Grid).Parent;
+            var trackName = (parentSequencerTrackUI as SequencerTrackUI).Name;
+
+            // Extract the track ID for the button that triggered the loading event.
+            trackName = trackName.Substring(14);
+            int selectedTrack = 0;
+            selectedTrack = int.Parse(trackName);
+
             // Iterate through the UI elements and activate the checkboxes.
             for (int i = 0; i < 8; i++)
             {
-                CheckBox slotActivateCheckBoxElement = (CheckBox)this.FindName("Slot" + i.ToString() + "Active");
-                slotActivateCheckBoxElement.IsChecked = true;
-                this.ActivateSlot(slotActivateCheckBoxElement, null);
+                // Get the respective item, update the active state and store it back again.
+                SequencerSlot slotItemForUpdate = this.globalSequencerDataInstance.getSlotAtPosition(selectedTrack, i);
+                slotItemForUpdate.active = false;
+
+                // Get the current slot activity button.
+                Button slotActivateButtonElement = (Button)this.FindName("Slot" + i.ToString() + "Active");
+                this.ActivateSlot(slotActivateButtonElement, null);
             }
         }
 
@@ -216,12 +242,75 @@ namespace uwp_technocoid_v10
         /// <param name="e">RoutedEventArgs</param>
         private void DeactivateAllSlots(object sender, RoutedEventArgs e)
         {
+            var parentStackPanel = (sender as Button).Parent;
+            var parentTrackStackPanel = (parentStackPanel as StackPanel).Parent;
+            var parentTrackGrid = (parentTrackStackPanel as StackPanel).Parent;
+            var parentSequencerTrackUI = (parentTrackGrid as Grid).Parent;
+            var trackName = (parentSequencerTrackUI as SequencerTrackUI).Name;
+
+            // Extract the track ID for the button that triggered the loading event.
+            trackName = trackName.Substring(14);
+            int selectedTrack = 0;
+            selectedTrack = int.Parse(trackName);
+
             // Iterate through the UI elements and deactivate the checkboxes.
             for (int i = 0; i < 8; i++)
             {
-                CheckBox slotActivateCheckBoxElement = (CheckBox)this.FindName("Slot" + i.ToString() + "Active");
-                slotActivateCheckBoxElement.IsChecked = false;
-                this.ActivateSlot(slotActivateCheckBoxElement, null);
+                // Get the respective item, update the active state and store it back again.
+                SequencerSlot slotItemForUpdate = this.globalSequencerDataInstance.getSlotAtPosition(selectedTrack, i);
+                slotItemForUpdate.active = true;
+
+                // Get the current slot activity button.
+                Button slotActivateButtonElement = (Button)this.FindName("Slot" + i.ToString() + "Active");
+                this.ActivateSlot(slotActivateButtonElement, null);
+            }
+        }
+
+
+        /// <summary>
+        /// Button to clear all slots in the current track.
+        /// </summary>
+        /// <param name="sender">Button object for event as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void ClearAllSlots(object sender, RoutedEventArgs e)
+        {
+            var parentStackPanel = (sender as Button).Parent;
+            var parentTrackStackPanel = (parentStackPanel as StackPanel).Parent;
+            var parentTrackGrid = (parentTrackStackPanel as StackPanel).Parent;
+            var parentSequencerTrackUI = (parentTrackGrid as Grid).Parent;
+            var trackName = (parentSequencerTrackUI as SequencerTrackUI).Name;
+
+            // Extract the track ID for the button that triggered the loading event.
+            trackName = trackName.Substring(14);
+            int selectedTrack = 0;
+            selectedTrack = int.Parse(trackName);
+
+            // Iterate through the UI elements and deactivate the checkboxes.
+            for (int i = 0; i < 8; i++)
+            {
+                // Get the respective item, update the active state and store it back again.
+                SequencerSlot slotItemForUpdate = this.globalSequencerDataInstance.getSlotAtPosition(selectedTrack, i);
+                slotItemForUpdate.active = true;
+
+                // Get the current slot activity button.
+                Button slotActivateButtonElement = (Button)this.FindName("Slot" + i.ToString() + "Active");
+                this.ActivateSlot(slotActivateButtonElement, null);
+
+                // Create a new slot item to fill.
+                SequencerSlot newSlotItem = new SequencerSlot();
+
+                // Fill the slot items with empty data.
+                newSlotItem.active = false;
+                newSlotItem.videoFile = null;
+                newSlotItem.videoMediaSource = null;
+                newSlotItem.thumbnail = null;
+
+                // Store new slot information in global squencer data.
+                this.globalSequencerDataInstance.setSlotAtPosition(selectedTrack, i, newSlotItem);
+
+                // Clear the slot button.
+                Button videoSlotToClear = (Button)this.FindName("Slot" + i.ToString() + "Button");
+                videoSlotToClear.Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
             }
         }
     }

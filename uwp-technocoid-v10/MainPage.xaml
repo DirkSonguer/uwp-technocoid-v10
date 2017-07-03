@@ -5,26 +5,19 @@
     xmlns:local="using:uwp_technocoid_v10"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Width="980" Height="800">
+    mc:Ignorable="d" Width="900" Height="720" RequestedTheme="Dark">
 
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Orientation="Vertical">
-
-            <!-- debug text -->
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="statusTextControl" Margin="10,10,0,10" TextWrapping="Wrap" Text="DebugText"/>
-            </StackPanel>
-
             <!-- player controls -->
-            <StackPanel Orientation="Horizontal">
-                <local:SequencerPlayerUI x:Name="sequencerPlayerControls"/>
-                <local:SequencerBpmUI x:Name="sequencerBpmControls"/>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,10" HorizontalAlignment="Center">
+                <local:SequencerControllerUI x:Name="sequencerControls"/>
             </StackPanel>
-            <local:SequencerTrackUI x:Name="sequencerTrack0" Margin="0,10,0,0"/>
-            <local:SequencerTrackUI x:Name="sequencerTrack1" Margin="0,10,0,0"/>
-            <local:SequencerTrackUI x:Name="sequencerTrack2" Margin="0,10,0,0"/>
-            <local:SequencerTrackUI x:Name="sequencerTrack3" Margin="0,10,0,0"/>
+            <local:SequencerTrackUI x:Name="sequencerTrack0"/>
+            <local:SequencerTrackUI x:Name="sequencerTrack1"/>
+            <local:SequencerTrackUI x:Name="sequencerTrack2"/>
+            <local:SequencerTrackUI x:Name="sequencerTrack3"/>
         </StackPanel>
     </Grid>
 </Page>

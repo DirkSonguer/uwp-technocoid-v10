@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace uwp_technocoid_v10
 {
-    public sealed partial class SequencerBpmUI : UserControl
+    public sealed partial class SequencerControllerUI : UserControl
     {
         // Access to all global classes.
         GlobalSequencerController globalSequencerControllerInstance;
@@ -29,7 +30,7 @@ namespace uwp_technocoid_v10
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SequencerBpmUI()
+        public SequencerControllerUI()
         {
             this.InitializeComponent();
 
@@ -175,6 +176,7 @@ namespace uwp_technocoid_v10
                     bpmAverage = bpmAverage / 10000;
                     int newBPM = Convert.ToInt32(60000 / bpmAverage);
                     currentBpmSlider.Value = newBPM;
+                    statusTextControl.Text = "New BPM set.";
                 }
             }
         }
@@ -245,6 +247,49 @@ namespace uwp_technocoid_v10
                 currentBpm += 10;
                 currentBpmSlider.Value = currentBpm;
             }
+        }
+
+        /// <summary>
+        /// User pressed the play button.
+        /// Start / stop the sequencer and change the button icon accordingly.
+        /// </summary>
+        /// <param name="sender">The button for the play functionality as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void StartSequencer(object sender, RoutedEventArgs e)
+        {
+            if ("\uE102" == startSequencerButton.Content.ToString())
+            {
+                startSequencerButton.Content = "\uE103";
+                this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
+                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
+            }
+            else
+            {
+                startSequencerButton.Content = "\uE102";
+                this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
+                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+            }
+        }
+
+        /// <summary>
+        /// User pressed reset button.
+        /// This will reset the sequencer, effectively restarting it from position 0.
+        /// </summary>
+        /// <param name="sender">The button for the reset functionality as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void ResetSequencer(object sender, RoutedEventArgs e)
+        {
+            this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
+            this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
+        }
+
+        /// <summary>
+        /// Simple exposure to the status message text element.
+        /// </summary>
+        /// <param name="newStatusMessage">String with the new status message</param>
+        public void SetStatusMessage(String newStatusMessage)
+        {
+            statusTextControl.Text = newStatusMessage;
         }
     }
 }

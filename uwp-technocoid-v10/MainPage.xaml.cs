@@ -84,18 +84,18 @@ namespace uwp_technocoid_v10
 
             // Activate and show the new window.
             bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
-            statusTextControl.Text = "External view created";
+            sequencerControls.SetStatusMessage("Player window created, ready.");
         }
 
         /// <summary>
         /// The sequencer triggered a step progression.
         /// CHange the UI accordingly.
         /// </summary>
-        /// <param name="currentSequencerPosition">Current position slot as int.</param>
+        /// <param name="currentSequencerPosition">Current position slot as int</param>
         /// <param name="e">PropertyChangedEventArgs.</param>
         private void SequencerTrigger(object currentSequencerPosition, PropertyChangedEventArgs e)
         {
-            statusTextControl.Text = "Sequencer is at step " + currentSequencerPosition.ToString();
+            sequencerControls.SetStatusMessage("Sequencer running, step " + ((int)currentSequencerPosition+1).ToString() + ".");
 
             // Get current and last sequencer position.
             int lastSequencerPosition = (int)currentSequencerPosition - 1;
@@ -118,15 +118,14 @@ namespace uwp_technocoid_v10
         /// The sequencer has been started or stopped.
         /// CHange the UI accordingly.
         /// </summary>
-        /// <param name="currentSequencerPosition">Bool to indicate if sequencer has been started or stopped.</param>
+        /// <param name="currentSequencerPosition">Bool to indicate if sequencer has been started or stopped</param>
         /// <param name="e">PropertyChangedEventArgs.</param>
         private void SequencerPlayingChanged(object currentSequencerPlaying, PropertyChangedEventArgs e)
         {
-            statusTextControl.Text = "Sequencer playing is " + currentSequencerPlaying.ToString();
-
             // If the sequencer has been stopped, clear all track highlights.
             if (!(bool)currentSequencerPlaying)
             {
+                sequencerControls.SetStatusMessage("Sequencer stopped, ready.");
                 for (int i = 0; i < 8; i++)
                 {
                     sequencerTrack0.HightlightSlot(i, false);
@@ -134,6 +133,9 @@ namespace uwp_technocoid_v10
                     sequencerTrack2.HightlightSlot(i, false);
                     sequencerTrack3.HightlightSlot(i, false);
                 }
+            } else
+            {
+                sequencerControls.SetStatusMessage("Sequencer is running.");
             }
         }
     }
