@@ -21,7 +21,7 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 - Adjust the opacity for the respective track.
 - Hit the play button to start the sequencer.
 - Activated slots with videos will be played in the player window.
-- The Reset button (next to play) will reset the step counter to 0.
+- The Reset button (below the play button) will reset the step counter to 0.
 - Tap the space bar on each beat to set the BPM.
 - Press left / right to de- / increase the BPM count by 10.
 - Press down / up to halve / double the BPM count.
@@ -31,6 +31,8 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 ![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_intro2.png "Technocoid Intro 2")
 
 ![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_intro3.png "Technocoid Intro 3")
+
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_intro4.png "Technocoid Intro 4")
 
 
 # To Do

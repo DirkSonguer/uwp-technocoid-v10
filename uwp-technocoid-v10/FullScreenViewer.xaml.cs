@@ -112,8 +112,16 @@ namespace uwp_technocoid_v10
             await this.globalEventHandlerInstance.playerDispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
-                 // Originally we started / stopped the players here,
-                 // however this is done via the sequencer triggers now.
+                 if (!(bool)isCurrentlyPlaying)
+                 {
+                     // Iterate through all video players.
+                     for (int i = 0; i < 4; i++)
+                     {
+                         // Get the media player element for the current track and stop it.
+                         MediaPlayerElement currentMediaElement = (MediaPlayerElement)this.FindName("mediaPlayerElementTrack" + i.ToString());
+                         currentMediaElement.MediaPlayer.Pause();
+                     }
+                 }
              });
         }
 

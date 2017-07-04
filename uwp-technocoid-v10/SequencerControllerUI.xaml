@@ -10,7 +10,7 @@
     d:DesignWidth="480">
 
     <Grid>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Padding="10, 10, 10, 10">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Padding="20, 10, 20, 10">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                     <Button  x:Name="startSequencerButton" Width="50" Height="50" Margin="0,0,10,0" Background="#2c2c2c" Click="StartSequencer" Content="&#xE102;" FontFamily="Segoe UI Symbol"/>
