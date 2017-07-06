@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Windows.Devices.Enumeration;
+using Windows.Devices.Midi;
 using Windows.UI.Core;
 
 namespace uwp_technocoid_v10
@@ -58,6 +60,50 @@ namespace uwp_technocoid_v10
             if (TrackOpacityChanged != null)
             {
                 TrackOpacityChanged(sequencerTrack, new PropertyChangedEventArgs("int sequencerTrack"));
+            }
+        }
+
+        // An event indicating that player should enter or leave fullscreen mode.
+        // Classes can subscribe to this event and get notified.
+        public event PropertyChangedEventHandler FullscreenModeChanged;
+        public void NotifyFullscreenModeChanged(bool requestedFullscreenMode)
+        {
+            if (FullscreenModeChanged != null)
+            {
+                FullscreenModeChanged(requestedFullscreenMode, new PropertyChangedEventArgs("bool requestedFullscreenMode"));
+            }
+        }
+
+        // An event indicating that the available MIDI devices have changed.
+        // Classes can subscribe to this event and get notified.
+        public event PropertyChangedEventHandler AvailableMidiDevicesChanged;
+        public void NotifyAvailableMidiDevicesChanged()
+        {
+            if (AvailableMidiDevicesChanged != null)
+            {
+                AvailableMidiDevicesChanged(null, new PropertyChangedEventArgs("DeviceInformationCollection availableMidiDevices"));
+            }
+        }
+
+        // An event indicating that the selected MIDI device has changed.
+        // Classes can subscribe to this event and get notified.
+        public event PropertyChangedEventHandler SelectedMidiDeviceChanged;
+        public void NotifySelectedMidiDeviceChanged(int selectedMidiDeviceIndex)
+        {
+            if (SelectedMidiDeviceChanged != null)
+            {
+                SelectedMidiDeviceChanged(selectedMidiDeviceIndex, new PropertyChangedEventArgs("int selectedIndex"));
+            }
+        }
+
+        // An event indicating that a MIDI message has been received.
+        // Classes can subscribe to this event and get notified.
+        public event PropertyChangedEventHandler MidiMessageReceived;
+        public void NotifyMidiMessageReceived(IMidiMessage receivedMidiMessage)
+        {
+            if (MidiMessageReceived != null)
+            {
+                MidiMessageReceived(receivedMidiMessage, new PropertyChangedEventArgs("IMidiMessage receivedMidiMessage"));
             }
         }
     }

@@ -1,8 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation;
+using Windows.Graphics.Display;
+using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace uwp_technocoid_v10
 {
@@ -25,9 +31,11 @@ namespace uwp_technocoid_v10
         public FullScreenViewer()
         {
             this.InitializeComponent();
-
-            // Hide the standard title bar.
+            
+            // Hide the standard title bar by removing the title bar and making the buttons transparent.
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+            ApplicationView.GetForCurrentView().TitleBar.ButtonBackgroundColor = Colors.Transparent;
+            ApplicationView.GetForCurrentView().TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 
             // Get an instance to the sequencer controller.
             this.globalSequencerControllerInstance = GlobalSequencerController.GetInstance();
@@ -43,6 +51,9 @@ namespace uwp_technocoid_v10
 
             // Bind the ChangeOpacity() function to the TrackOpacityChanged event.
             this.globalEventHandlerInstance.TrackOpacityChanged += this.ChangeOpacity;
+
+            // Bind the ChangeOpacity() function to the TrackOpacityChanged event.
+            this.globalEventHandlerInstance.FullscreenModeChanged += this.ChangeFullscreen;
 
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
@@ -61,8 +72,8 @@ namespace uwp_technocoid_v10
         /// <summary>
         /// This is triggered if the sequencer progressed.
         /// </summary>
-        /// <param name="currentSequencerPosition">The updated sequencer position as int.</param>
-        /// <param name="e">PropertyChangedEventArgs.</param>
+        /// <param name="currentSequencerPosition">The updated sequencer position as int</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
         private async void SequencerTrigger(object currentSequencerPosition, PropertyChangedEventArgs e)
         {
             // Get the correct thread for the media player UI.
@@ -104,8 +115,8 @@ namespace uwp_technocoid_v10
         /// Start and stop the sequencer based on the parameter given.
         /// Note that this subscribes to the CurrentlyPlayingChanged in the event handler.
         /// </summary>
-        /// <param name="isCurrentlyPlaying">This starts / stops the timer based on a bool.</param>
-        /// <param name="e">PropertyChangedEventArgs.</param>
+        /// <param name="isCurrentlyPlaying">This starts / stops the timer based on a bool</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
         private async void StartSequencer(object isCurrentlyPlaying, PropertyChangedEventArgs e)
         {
             // Get the correct thread for the media player UI.
@@ -128,8 +139,8 @@ namespace uwp_technocoid_v10
         /// <summary>
         /// A sequencer track changed its opacity.
         /// </summary>
-        /// <param name="sequencerTrack">The sequencer track that changed its opacity.</param>
-        /// <param name="e">PropertyChangedEventArgs.</param>
+        /// <param name="sequencerTrack">The sequencer track that changed its opacity</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
         private async void ChangeOpacity(object sequencerTrack, PropertyChangedEventArgs e)
         {
             // Get the track to change opacity for.
@@ -145,6 +156,40 @@ namespace uwp_technocoid_v10
                  {
                      currentMediaPlayerUIElement.Opacity = newTrackOpacity;
                  }
+             });
+        }
+
+        /// <summary>
+        /// The user wants to toggle the fullscreen mode.
+        /// TODO: Implement feature.
+        /// </summary>
+        /// <param name="requestedFullscreenMode">Fullscreen toggle flag</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        private async void ChangeFullscreen(object requestedFullscreenMode, PropertyChangedEventArgs e)
+        {
+            // Get the correct thread for the media player UI.
+            await this.globalEventHandlerInstance.playerDispatcher.RunAsync(
+             CoreDispatcherPriority.Normal, () =>
+             {
+                 /*
+                 var view = ApplicationView.GetForCurrentView();
+
+                 var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+                 var scaleFactor = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+                 var size = new Size(bounds.Width * scaleFactor, bounds.Height * scaleFactor);
+
+                 size.Height -= 550;
+                 size.Width -= 500;
+
+                 if (view.TryResizeView(size))
+                 {
+
+                 }
+                 else
+                 {
+
+                 }
+                 */
              });
         }
     }

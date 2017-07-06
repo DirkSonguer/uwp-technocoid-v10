@@ -81,8 +81,8 @@ namespace uwp_technocoid_v10
         /// <summary>
         /// Stores a new video item into a given sequencer position.
         /// </summary>
-        /// <param name="sequencerPosition">The position on the sequencer board to associate the video with.</param>
-        /// <param name="newVideoItem">The video item to store.</param>
+        /// <param name="sequencerPosition">The position on the sequencer board to associate the video with</param>
+        /// <param name="newVideoItem">The video item to store</param>
         public void setSlotAtPosition(int sequencerTrack, int sequencerPosition, SequencerSlot newVideoItem)
         {
             tracks[sequencerTrack].slots[sequencerPosition] = newVideoItem;
@@ -91,7 +91,7 @@ namespace uwp_technocoid_v10
         /// <summary>
         /// Gets the video item associated with the given sequencer position.
         /// </summary>
-        /// <param name="sequencerPosition">The position on the sequencer board to associate the video with.</param>
+        /// <param name="sequencerPosition">The position on the sequencer board to associate the video with</param>
         /// <returns></returns>
         public SequencerSlot getSlotAtPosition(int sequencerTrack, int sequencerPosition)
         {

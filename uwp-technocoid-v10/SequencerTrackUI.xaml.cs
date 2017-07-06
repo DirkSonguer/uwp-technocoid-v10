@@ -104,8 +104,8 @@ namespace uwp_technocoid_v10
         /// A sequencer slot has been clicked to load a new video into the
         /// respective slot.
         /// </summary>
-        /// <param name="sender">The button for the respective slot as Button.</param>
-        /// <param name="e">RoutedEventArgs.</param>
+        /// <param name="sender">The button for the respective slot as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
         private async void LoadNewVideoForSlot(object sender, RoutedEventArgs e)
         {
             // Retrieve slot and track names.
@@ -166,8 +166,8 @@ namespace uwp_technocoid_v10
         /// A slot activity indicator has been clicked to either activate or
         /// deactivate the slot.
         /// </summary>
-        /// <param name="sender">The activation element for the respective slot as CheckBox.</param>
-        /// <param name="e">RoutedEventArgs.</param>
+        /// <param name="sender">The activation element for the respective slot as CheckBox</param>
+        /// <param name="e">RoutedEventArgs</param>
         private void ActivateSlot(object sender, RoutedEventArgs e)
         {
             // Retrieve slot and track names.

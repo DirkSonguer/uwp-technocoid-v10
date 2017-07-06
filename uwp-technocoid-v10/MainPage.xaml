@@ -13,6 +13,7 @@
             <!-- player controls -->
             <StackPanel Orientation="Horizontal" Margin="0,10,0,10" HorizontalAlignment="Center">
                 <local:SequencerControllerUI x:Name="sequencerControls"/>
+                <ListBox x:Name="midiInputDeviceListBox" SelectionChanged="SelectedMidiDeviceChanged" Margin="20, 10, 20, 10"/>
             </StackPanel>
             <local:SequencerTrackUI x:Name="sequencerTrack0"/>
             <local:SequencerTrackUI x:Name="sequencerTrack1"/>

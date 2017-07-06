@@ -12,7 +12,9 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Core;
 using Windows.ApplicationModel.Core;
 using System.ComponentModel;
-using Windows.Foundation.Metadata;
+using Windows.UI.Xaml.Navigation;
+using Windows.Devices.Enumeration;
+using Windows.Devices.Midi;
 
 namespace uwp_technocoid_v10
 {
@@ -26,12 +28,18 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
+        // MIDI controller class, handling all the MIDI input.
+        MidiController midiController;
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public MainPage()
         {
             this.InitializeComponent();
+
+            // Explicitly show the title bar.
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
 
             // Get an instance to the sequencer controller.
             this.globalSequencerControllerInstance = GlobalSequencerController.GetInstance();
@@ -41,8 +49,19 @@ namespace uwp_technocoid_v10
             this.globalEventHandlerInstance.SequencerPositionChanged += this.SequencerTrigger;
             this.globalEventHandlerInstance.CurrentlyPlayingChanged += this.SequencerPlayingChanged;
 
+            // Store the current dispatcher to the global event handler.
+            this.globalEventHandlerInstance.controllerDispatcher = Dispatcher;
+
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
+
+            // Initialise MIDI controller and start watcher for new devices.
+            midiController = new MidiController();
+            midiController.StartWatcher();
+
+            // Register events if the available MIDI devices have changed and if a MIDI message was received.
+            this.globalEventHandlerInstance.AvailableMidiDevicesChanged += this.UpdateMidiDeviceList;
+            this.globalEventHandlerInstance.MidiMessageReceived += this.MidiMessageReceived;
 
             // Initially create the UI.
             CreateUI();
@@ -88,14 +107,71 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
+        /// The list of MIDI devices has been updated.
+        /// </summary>
+        /// <param name="empty">Note that there are no parameters passed down as the list should be taken from the midi controller object</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        public async void UpdateMidiDeviceList(object empty, PropertyChangedEventArgs e)
+        {
+            await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
+             CoreDispatcherPriority.Normal, () =>
+             {
+                 // Clear the current MIDI device list.
+                 midiInputDeviceListBox.Items.Clear();
+
+                 // If no MIDI devices could be found, add an information.
+                 if (midiController.availableMidiDevices.Count == 0)
+                 {
+                     midiInputDeviceListBox.Items.Add("No MIDI devices found!");
+                 }
+
+                 // Iterate through the MIDI device list and add them to the list.
+                 foreach (var deviceInformation in midiController.availableMidiDevices)
+                 {
+                     midiInputDeviceListBox.Items.Add(deviceInformation.Name);
+                 }
+             });
+        }
+
+        /// <summary>
+        /// The user has selected a MIDI device from the list.
+        /// </summary>
+        /// <param name="selectedMidiDeviceList">List that triggered the selection</param>
+        /// <param name="e">SelectionChangedEventArgs</param>
+        private void SelectedMidiDeviceChanged(object selectedMidiDeviceList, SelectionChangedEventArgs e)
+        {
+            // Notify the event handler about the change.
+            this.globalEventHandlerInstance.NotifySelectedMidiDeviceChanged(midiInputDeviceListBox.SelectedIndex);
+        }
+
+        /// <summary>
+        /// A new MIDI message has been received.
+        /// </summary>
+        /// <param name="receivedMidiMessage">Received MIDI message as IMidiMessage object</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        private void MidiMessageReceived(object receivedMidiMessage, PropertyChangedEventArgs e)
+        {
+/*
+            System.Diagnostics.Debug.WriteLine((IMidiMessage)receivedMidiMessage.Timestamp.ToString());
+
+            if ((IMidiMessage)receivedMidiMessage.Type == MidiMessageType.NoteOn)
+            {
+                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Channel);
+                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Note);
+                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Velocity);
+            }
+            */
+        }
+
+        /// <summary>
         /// The sequencer triggered a step progression.
-        /// CHange the UI accordingly.
+        /// Change the UI accordingly.
         /// </summary>
         /// <param name="currentSequencerPosition">Current position slot as int</param>
-        /// <param name="e">PropertyChangedEventArgs.</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
         private void SequencerTrigger(object currentSequencerPosition, PropertyChangedEventArgs e)
         {
-            sequencerControls.SetStatusMessage("Sequencer running, step " + ((int)currentSequencerPosition+1).ToString() + ".");
+            sequencerControls.SetStatusMessage("Sequencer running, step " + ((int)currentSequencerPosition + 1).ToString() + ".");
 
             // Get current and last sequencer position.
             int lastSequencerPosition = (int)currentSequencerPosition - 1;
@@ -119,7 +195,7 @@ namespace uwp_technocoid_v10
         /// CHange the UI accordingly.
         /// </summary>
         /// <param name="currentSequencerPosition">Bool to indicate if sequencer has been started or stopped</param>
-        /// <param name="e">PropertyChangedEventArgs.</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
         private void SequencerPlayingChanged(object currentSequencerPlaying, PropertyChangedEventArgs e)
         {
             // If the sequencer has been stopped, clear all track highlights.
@@ -133,7 +209,8 @@ namespace uwp_technocoid_v10
                     sequencerTrack2.HightlightSlot(i, false);
                     sequencerTrack3.HightlightSlot(i, false);
                 }
-            } else
+            }
+            else
             {
                 sequencerControls.SetStatusMessage("Sequencer is running.");
             }

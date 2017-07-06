@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -7,6 +8,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -14,6 +16,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Devices.Midi;
 
 namespace uwp_technocoid_v10
 {
@@ -39,6 +42,8 @@ namespace uwp_technocoid_v10
 
             // Get an instance to the event handler.
             this.globalEventHandlerInstance = GlobalEventHandler.GetInstance();
+
+            this.globalEventHandlerInstance.MidiMessageReceived += this.MidiMessageReceived;
 
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
@@ -94,6 +99,25 @@ namespace uwp_technocoid_v10
             {
                 this.TapDetectionTriggered();
             }
+        }
+
+        /// <summary>
+        /// A new MIDI message has been received.
+        /// </summary>
+        /// <param name="receivedMidiMessage">Received MIDI message as IMidiMessage object</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        private async void MidiMessageReceived(object receivedMidiMessage, PropertyChangedEventArgs e)
+        {
+            await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
+             CoreDispatcherPriority.Normal, () =>
+             {
+                 MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)receivedMidiMessage;
+
+                 if (currentMidiMessage.Controller == 6)
+                 {
+                     currentBpmSlider.Value = (currentMidiMessage.ControlValue * 2);
+                 }
+             });
         }
 
         /// <summary>
@@ -290,6 +314,16 @@ namespace uwp_technocoid_v10
         public void SetStatusMessage(String newStatusMessage)
         {
             statusTextControl.Text = newStatusMessage;
+        }
+
+        /// <summary>
+        /// Button to set the player window to fullscreen.
+        /// </summary>
+        /// <param name="sender">Button object</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void ToggleFullscreen(object sender, RoutedEventArgs e)
+        {
+            this.globalEventHandlerInstance.NotifyFullscreenModeChanged(true);
         }
     }
 }

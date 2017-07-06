@@ -67,8 +67,8 @@ namespace uwp_technocoid_v10
         /// Start and stop the sequencer based on the parameter given.
         /// Note that this subscribes to the CurrentlyPlayingChanged in the event handler.
         /// </summary>
-        /// <param name="isCurrentlyPlaying">This starts / stops the timer based on a bool.</param>
-        /// <param name="e">PropertyChangedEventArgs.</param>
+        /// <param name="isCurrentlyPlaying">This starts / stops the timer based on a bool</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
         private void StartSequencer(object isCurrentlyPlaying, PropertyChangedEventArgs e)
         {
             isSequencerRunning = (bool)isCurrentlyPlaying;
@@ -89,7 +89,7 @@ namespace uwp_technocoid_v10
         /// It just increases the sequencer position, so other classes should
         /// subscribe to the SequencerPositionChanged event in the event handler.
         /// </summary>
-        /// <param name="timer">Timer object.</param>
+        /// <param name="timer">Timer object</param>
         private async void SequencerMainLoop(ThreadPoolTimer timer)
         {
             var dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
@@ -112,7 +112,7 @@ namespace uwp_technocoid_v10
         /// Update the BPM counter, setting a new timing for the master timer.
         /// If the timer is running, it will be updated directly.
         /// </summary>
-        /// <param name="newBPM">New BPM as int.</param>
+        /// <param name="newBPM">New BPM as int</param>
         public void UpdateBPM(int newBPM)
         {
             this.currentBPM = newBPM;

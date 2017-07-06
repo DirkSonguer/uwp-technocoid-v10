@@ -39,6 +39,7 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 
 - MIDI input.
 - Fullscreen option for player window.
+- Handle close events properly.
 - The whole thing is slow and stutters / flickers. Maybe I'll fix that.
 - Add an option de- / activate Stretch="UniformToFill" to the UI.
 - Slider for video playback speed for each track?
@@ -55,7 +56,7 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 Technocoid was a side project of mine a couple of years ago (2002 or something like that).
 It was a simple VJ tool to experiment with realtime OpenGL based graphics, input (MIDI and
 some game controllers were supported), and UI. And of course to have a tool to do VJ gigs.
-I stopped developing it when I discovered Neon and later [Neon v2](http://neonv2.com/).
+I stopped developing it when I discovered [Neon](http://xplsv.com/neon/) and later [Neon v2](http://neonv2.com/).
 
 Recently I found myself searching for a simple VJ tool that acted a bit like a video step
 sequencer, much like Neon did, but I wasn't able to find one. Well, to be honest I didn't
