@@ -109,6 +109,9 @@
     <Compile Include="SequencerControllerUI.xaml.cs">
       <DependentUpon>SequencerControllerUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SequencerMidiUI.xaml.cs">
+      <DependentUpon>SequencerMidiUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SequencerTrackUI.xaml.cs">
       <DependentUpon>SequencerTrackUI.xaml</DependentUpon>
     </Compile>
@@ -143,6 +146,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SequencerControllerUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SequencerMidiUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

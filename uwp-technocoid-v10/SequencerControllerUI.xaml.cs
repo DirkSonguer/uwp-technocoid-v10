@@ -111,11 +111,12 @@ namespace uwp_technocoid_v10
             await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
-                 MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)receivedMidiMessage;
+                 MidiEvent receivedMidiEvent = (MidiEvent)receivedMidiMessage;
 
-                 if (currentMidiMessage.Controller == 6)
+                 if (receivedMidiEvent.eventType == MidiEventType.BPMChange)
                  {
-                     currentBpmSlider.Value = (currentMidiMessage.ControlValue * 2);
+                     currentBpmSlider.Value = (receivedMidiEvent.eventValue * 2);
+
                  }
              });
         }

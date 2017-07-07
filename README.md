@@ -68,5 +68,6 @@ check out UWP a little bit.
 
 - Microsoft Visual Studio 2017: https://www.visualstudio.com/.
 - Tested on Windows 10 Creators Update.
+- MIDI input tested with Akai LPD8 Wireless and Doepfer Pocket Control + MIDISport Uno.
 - Developed mostly while listening to https://www.twitch.tv/lost_in_house.
 - Tested during development with videos by https://twitter.com/TatsuyaBot.

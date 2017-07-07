@@ -6,12 +6,55 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
-using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using System.ComponentModel;
 
 namespace uwp_technocoid_v10
 {
+    enum MidiEventType
+    {
+        OpacityChange = 0,
+        BPMChange = 1,
+        playToggle = 2,
+        RewindToggle = 3,
+        TrackSelect = 4,
+        Slot0Toggle = 5,
+        Slot1Toggle = 6,
+        Slot2Toggle = 7,
+        Slot3Toggle = 8,
+        Slot4Toggle = 9,
+        Slot5Toggle = 10,
+        Slot6Toggle = 11,
+        Slot7Toggle = 12
+    };
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    class MidiEventTrigger
+    {
+        public MidiEventType triggerMessageType;
+
+        public int triggerChannel;
+        public int triggerID;
+
+        // The raw message for reference.
+        public IMidiMessage rawOriginalMessage;
+    }
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    class MidiEvent
+    {
+        public MidiEventType eventType;
+
+        // Every event just has one value that is relevant.
+        // In the case of toggles, this is pretty much just a bool.
+        // For BPM and Opacity changes it's a byte.
+        public int eventValue;
+    }
+
     class MidiController
     {
         // Access to the global event handler.
@@ -21,6 +64,11 @@ namespace uwp_technocoid_v10
         string deviceSelectorString;
 
         public DeviceInformationCollection availableMidiDevices { get; set; }
+
+        bool midiLearningActive = false;
+        MidiEventType midiLearningType = 0;
+
+        public MidiEventTrigger[] learnedMidiTriggers = new MidiEventTrigger[Enum.GetNames(typeof(MidiEventType)).Length];
 
         public MidiController()
         {
@@ -36,7 +84,12 @@ namespace uwp_technocoid_v10
             deviceWatcher.EnumerationCompleted += DeviceWatcher_EnumerationCompleted;
 
             this.globalEventHandlerInstance.SelectedMidiDeviceChanged += this.SelectedMidiDeviceChanged;
+            this.globalEventHandlerInstance.LearnMidiEvent += this.LearnMidiEvent;
 
+            for (int i = 0; i < Enum.GetNames(typeof(MidiEventType)).Length; i++)
+            {
+                learnedMidiTriggers[i] = new MidiEventTrigger();
+            }
         }
 
         ~MidiController()
@@ -117,7 +170,80 @@ namespace uwp_technocoid_v10
 
         private void MidiMessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
-            this.globalEventHandlerInstance.NotifyMidiMessageReceived(args.Message);
+            IMidiMessage rawMidiMessage = (IMidiMessage)args.Message;
+
+            // First check if we are in MIDI learn mode.
+            // If so, do not interpret the message, but instead use the message to associate
+            // its type with an event type.
+            if (this.midiLearningActive)
+            {
+                //learnedMidiTriggers
+                MidiEventTrigger learnedMidiEvent = new MidiEventTrigger();
+                learnedMidiEvent.triggerMessageType = this.midiLearningType;
+                learnedMidiEvent.rawOriginalMessage = rawMidiMessage;
+
+                // Check if the message to learn is a ranged value.
+                if ((int)this.midiLearningType < 2)
+                {
+                    // Ranged values are treated as controllers.
+                    if (rawMidiMessage.Type == MidiMessageType.ControlChange)
+                    {
+                        MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)args.Message;
+                        learnedMidiEvent.triggerChannel = currentMidiMessage.Channel;
+                        learnedMidiEvent.triggerID = currentMidiMessage.Controller;
+                    }
+                }
+                // If it's not a ranged value, it should be a toggle.
+                else
+                {
+                    // Toggles are treated as Note On events.
+                    if (rawMidiMessage.Type == MidiMessageType.NoteOn)
+                    {
+                        MidiNoteOnMessage currentMidiMessage = (MidiNoteOnMessage)args.Message;
+                        learnedMidiEvent.triggerChannel = currentMidiMessage.Channel;
+                        learnedMidiEvent.triggerID = currentMidiMessage.Note;
+                    }
+                }
+
+                this.learnedMidiTriggers[(int)this.midiLearningType] = learnedMidiEvent;
+                this.midiLearningActive = false;
+                return;
+            }
+
+            if (rawMidiMessage.Type == MidiMessageType.ControlChange)
+            {
+                MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)args.Message;
+                for (int i = 0; i < 2; i++)
+                {
+                    if (this.learnedMidiTriggers[i].triggerID == currentMidiMessage.Controller)
+                    {
+                        MidiEvent midiEvent = new MidiEvent();
+                        midiEvent.eventType = this.learnedMidiTriggers[i].triggerMessageType;
+                        midiEvent.eventValue = currentMidiMessage.ControlValue;
+                        this.globalEventHandlerInstance.NotifyMidiMessageReceived(midiEvent);
+                    }
+                }
+            }
+            else if(rawMidiMessage.Type == MidiMessageType.NoteOn)
+            {
+                MidiNoteOnMessage currentMidiMessage = (MidiNoteOnMessage)args.Message;
+                for (int i = 2; i < Enum.GetNames(typeof(MidiEventType)).Length; i++)
+                {
+                    if (this.learnedMidiTriggers[i].triggerID == currentMidiMessage.Note)
+                    {
+                        MidiEvent midiEvent = new MidiEvent();
+                        midiEvent.eventType = this.learnedMidiTriggers[i].triggerMessageType;
+                        midiEvent.eventValue = currentMidiMessage.Note;
+                        this.globalEventHandlerInstance.NotifyMidiMessageReceived(midiEvent);
+                    }
+                }
+            }
+        }
+
+        private void LearnMidiEvent(object midiEventToLearn, PropertyChangedEventArgs e)
+        {
+            this.midiLearningActive = true;
+            this.midiLearningType = (MidiEventType)midiEventToLearn;
         }
     }
 }

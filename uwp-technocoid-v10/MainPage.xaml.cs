@@ -28,9 +28,6 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
-        // MIDI controller class, handling all the MIDI input.
-        MidiController midiController;
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -49,19 +46,11 @@ namespace uwp_technocoid_v10
             this.globalEventHandlerInstance.SequencerPositionChanged += this.SequencerTrigger;
             this.globalEventHandlerInstance.CurrentlyPlayingChanged += this.SequencerPlayingChanged;
 
-            // Store the current dispatcher to the global event handler.
-            this.globalEventHandlerInstance.controllerDispatcher = Dispatcher;
-
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
-            // Initialise MIDI controller and start watcher for new devices.
-            midiController = new MidiController();
-            midiController.StartWatcher();
-
-            // Register events if the available MIDI devices have changed and if a MIDI message was received.
-            this.globalEventHandlerInstance.AvailableMidiDevicesChanged += this.UpdateMidiDeviceList;
-            this.globalEventHandlerInstance.MidiMessageReceived += this.MidiMessageReceived;
+            // Store the current dispatcher to the global event handler.
+            this.globalEventHandlerInstance.controllerDispatcher = Dispatcher;
 
             // Initially create the UI.
             CreateUI();
@@ -107,60 +96,17 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// The list of MIDI devices has been updated.
-        /// </summary>
-        /// <param name="empty">Note that there are no parameters passed down as the list should be taken from the midi controller object</param>
-        /// <param name="e">PropertyChangedEventArgs</param>
-        public async void UpdateMidiDeviceList(object empty, PropertyChangedEventArgs e)
-        {
-            await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
-             CoreDispatcherPriority.Normal, () =>
-             {
-                 // Clear the current MIDI device list.
-                 midiInputDeviceListBox.Items.Clear();
-
-                 // If no MIDI devices could be found, add an information.
-                 if (midiController.availableMidiDevices.Count == 0)
-                 {
-                     midiInputDeviceListBox.Items.Add("No MIDI devices found!");
-                 }
-
-                 // Iterate through the MIDI device list and add them to the list.
-                 foreach (var deviceInformation in midiController.availableMidiDevices)
-                 {
-                     midiInputDeviceListBox.Items.Add(deviceInformation.Name);
-                 }
-             });
-        }
-
-        /// <summary>
-        /// The user has selected a MIDI device from the list.
-        /// </summary>
-        /// <param name="selectedMidiDeviceList">List that triggered the selection</param>
-        /// <param name="e">SelectionChangedEventArgs</param>
-        private void SelectedMidiDeviceChanged(object selectedMidiDeviceList, SelectionChangedEventArgs e)
-        {
-            // Notify the event handler about the change.
-            this.globalEventHandlerInstance.NotifySelectedMidiDeviceChanged(midiInputDeviceListBox.SelectedIndex);
-        }
-
-        /// <summary>
         /// A new MIDI message has been received.
         /// </summary>
         /// <param name="receivedMidiMessage">Received MIDI message as IMidiMessage object</param>
         /// <param name="e">PropertyChangedEventArgs</param>
-        private void MidiMessageReceived(object receivedMidiMessage, PropertyChangedEventArgs e)
+        private async void MidiMessageReceived(object receivedMidiMessage, PropertyChangedEventArgs e)
         {
-/*
-            System.Diagnostics.Debug.WriteLine((IMidiMessage)receivedMidiMessage.Timestamp.ToString());
-
-            if ((IMidiMessage)receivedMidiMessage.Type == MidiMessageType.NoteOn)
-            {
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Channel);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Note);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Velocity);
-            }
-            */
+            await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
+             CoreDispatcherPriority.Normal, () =>
+             {
+                 MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)receivedMidiMessage;
+             });
         }
 
         /// <summary>
