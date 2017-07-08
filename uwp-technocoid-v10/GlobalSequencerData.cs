@@ -62,6 +62,10 @@ namespace uwp_technocoid_v10
         // change in the future.
         private SequencerTrack[] tracks = new SequencerTrack[4];
 
+        // Defines the currently active track.
+        // This is only used for use with MIDI, so on initialization no track is active.
+        public int currentlyActiveTrack = -1;
+
         /// <summary>
         /// Constructor.
         /// </summary>

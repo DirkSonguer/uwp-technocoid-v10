@@ -140,6 +140,5 @@ namespace uwp_technocoid_v10
                 MidiEventLearned(midiEventLearned, new PropertyChangedEventArgs("MidiEventType midiEventLearned"));
             }
         }
-
     }
 }

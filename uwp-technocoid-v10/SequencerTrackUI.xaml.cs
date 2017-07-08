@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -10,6 +11,7 @@ using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -43,6 +45,8 @@ namespace uwp_technocoid_v10
 
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
+
+            this.globalEventHandlerInstance.MidiEventReceived += this.MidiEventReceived;
         }
 
         /// <summary>
@@ -65,6 +69,67 @@ namespace uwp_technocoid_v10
             {
                 highlightedStackPanel.Background = new SolidColorBrush(Windows.UI.Colors.Transparent);
             }
+        }
+
+        /// <summary>
+        /// A new MIDI event has been received.
+        /// </summary>
+        /// <param name="receivedMidiEvent">Received MIDI event as MidiEvent object</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        private async void MidiEventReceived(object receivedMidiEvent, PropertyChangedEventArgs e)
+        {
+            await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
+             CoreDispatcherPriority.Normal, () =>
+             {
+                 MidiEvent midiEvent = (MidiEvent)receivedMidiEvent;
+
+                 // Retrieve slot and track names.
+                 var parentTrackStackPanel = TrackActivationIndicator.Parent;
+                 var parentTrackGrid = (parentTrackStackPanel as StackPanel).Parent;
+                 var parentSequencerTrackUI = (parentTrackGrid as Grid).Parent;
+                 var trackName = (parentSequencerTrackUI as SequencerTrackUI).Name;
+
+                 // Extract the track ID for the button that triggered the loading event.
+                 trackName = trackName.Substring(14);
+                 int selectedTrack = 0;
+                 selectedTrack = int.Parse(trackName);
+
+                 // Interpret Track select change.
+                 if (midiEvent.type == MidiEventType.TrackSelect)
+                 {
+                     // Check if this is the first track in the sequencer.
+                     if (selectedTrack == 0)
+                     {
+                         // If so, then increase / update the currently active track.
+                         if (this.globalSequencerDataInstance.currentlyActiveTrack < 3)
+                         {
+                             this.globalSequencerDataInstance.currentlyActiveTrack += 1;
+                         } else
+                         {
+                             this.globalSequencerDataInstance.currentlyActiveTrack = 0;
+                         }
+                     }
+
+                     // Change the activity indicator colors according to the currently active state.
+                     if (this.globalSequencerDataInstance.currentlyActiveTrack == selectedTrack)
+                     {
+                         TrackActivationIndicator.Fill = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
+                     } else
+                     {
+                         TrackActivationIndicator.Fill = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                     }
+                 }
+
+                 // Interpret Opacity change.
+                 if (midiEvent.type == MidiEventType.OpacityChange)
+                 {
+                     // Change the activity indicator colors according to the currently active state.
+                     if (this.globalSequencerDataInstance.currentlyActiveTrack == selectedTrack)
+                     {
+                         OpacitySlider.Value = midiEvent.value;
+                     }
+                 }
+             });
         }
 
         /// <summary>

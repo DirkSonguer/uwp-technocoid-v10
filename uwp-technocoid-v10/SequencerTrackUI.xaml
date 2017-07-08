@@ -11,6 +11,7 @@
 
     <Grid>
         <StackPanel Orientation="Horizontal">
+            <Rectangle x:Name="TrackActivationIndicator" Width="10"/>
             <Slider x:Name="OpacitySlider" Margin="10,0,20,0" Orientation="Vertical" VerticalAlignment="Center" Height="100" Minimum="0" Maximum="100" TickPlacement="Outside" TickFrequency="10" Value="100" ValueChanged="ChangeOpacityForTrack"/>
             <StackPanel Orientation="Vertical" Margin="00,0,20,0" VerticalAlignment="Center">
                 <Button x:Name="ActivateAllSlotsButton" Margin="0,0,0,10" Width="30" Height="30" Padding="0" Content="&#xE005;" FontSize="10" FontFamily="Segoe UI Symbol" Click="ActivateAllSlots" />
