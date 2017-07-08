@@ -47,7 +47,7 @@ namespace uwp_technocoid_v10
 
             // Register events if the available MIDI devices have changed and if a MIDI message was received.
             this.globalEventHandlerInstance.AvailableMidiDevicesChanged += this.UpdateMidiDeviceList;
-            this.globalEventHandlerInstance.MidiMessageReceived += this.MidiMessageReceived;
+            this.globalEventHandlerInstance.MidiEventReceived += this.MidiEventReceived;
 
         }
 
@@ -104,17 +104,17 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// A new MIDI message has been received.
+        /// A new MIDI event has been received.
         /// </summary>
-        /// <param name="receivedMidiMessage">Received MIDI message as IMidiMessage object</param>
+        /// <param name="receivedMidiEvent">Received MIDI event as MidiEvent object</param>
         /// <param name="e">PropertyChangedEventArgs</param>
-        private async void MidiMessageReceived(object receivedMidiMessage, PropertyChangedEventArgs e)
+        private async void MidiEventReceived(object receivedMidiEvent, PropertyChangedEventArgs e)
         {
             await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
-                 MidiEvent receivedMidiEvent = new MidiEvent();
-                 statusTextControl.Text = "MIDI controller message received of type: " + receivedMidiEvent.eventType + " and value: " + receivedMidiEvent.eventValue;
+                 MidiEvent midiEvent = (MidiEvent)receivedMidiEvent;
+                 statusTextControl.Text = "MIDI controller message received of type: " + midiEvent.type + " and value: " + midiEvent.value;
              });
         }
 
@@ -125,9 +125,11 @@ namespace uwp_technocoid_v10
         /// <param name="e">RoutedEventArgs</param>
         private void LearnMidiCommand(object learnCommandButton, RoutedEventArgs e)
         {
-            //            this.learningActive = true;
-            //            this.learningMode = (learnCommandButton as Button).Content.ToString();
-            MidiEventType midiEventToLearn = MidiEventType.BPMChange;
+            // Get ID of the MIDI event type.
+            var eventType = (learnCommandButton as Button).Name.Substring(13);
+            MidiEventType midiEventToLearn = (MidiEventType)int.Parse(eventType);
+
+            // Notify subscribers about learning a new MIDI event.
             this.globalEventHandlerInstance.NotifyLearnMidiEvent(midiEventToLearn);
         }
     }

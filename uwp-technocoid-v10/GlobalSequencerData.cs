@@ -36,6 +36,9 @@ namespace uwp_technocoid_v10
         // The current opacity of the track player.
         public double opacity = 1.0;
 
+        // Flag if the sequencer is currently selected.
+        public bool selected = false;
+
         // The video items in one track.
         public SequencerSlot[] slots = new SequencerSlot[8];
     }

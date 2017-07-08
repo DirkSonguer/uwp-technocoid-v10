@@ -43,7 +43,7 @@ namespace uwp_technocoid_v10
             // Get an instance to the event handler.
             this.globalEventHandlerInstance = GlobalEventHandler.GetInstance();
 
-            this.globalEventHandlerInstance.MidiMessageReceived += this.MidiMessageReceived;
+            this.globalEventHandlerInstance.MidiEventReceived += this.MidiEventReceived;
 
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
@@ -102,21 +102,34 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// A new MIDI message has been received.
+        /// A new MIDI event has been received.
         /// </summary>
-        /// <param name="receivedMidiMessage">Received MIDI message as IMidiMessage object</param>
+        /// <param name="receivedMidiEvent">Received MIDI event as MidiEvent object</param>
         /// <param name="e">PropertyChangedEventArgs</param>
-        private async void MidiMessageReceived(object receivedMidiMessage, PropertyChangedEventArgs e)
+        private async void MidiEventReceived(object receivedMidiEvent, PropertyChangedEventArgs e)
         {
             await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
              {
-                 MidiEvent receivedMidiEvent = (MidiEvent)receivedMidiMessage;
+                 MidiEvent midiEvent = (MidiEvent)receivedMidiEvent;
 
-                 if (receivedMidiEvent.eventType == MidiEventType.BPMChange)
+                 // Interpret BPM change.
+                 if (midiEvent.type == MidiEventType.BPMChange)
                  {
-                     currentBpmSlider.Value = (receivedMidiEvent.eventValue * 2);
+                     currentBpmSlider.Value = (midiEvent.value * 2);
 
+                 }
+
+                 // Interpret Play toggle.
+                 if (midiEvent.type == MidiEventType.PlayToggle)
+                 {
+                     this.StartSequencer(startSequencerButton, null);
+                 }
+
+                 // Interpret Rewind toggle.
+                 if (midiEvent.type == MidiEventType.RewindToggle)
+                 {
+                     this.RewindSequencer(rewindSequencerButton, null);
                  }
              });
         }
@@ -297,12 +310,12 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// User pressed reset button.
-        /// This will reset the sequencer, effectively restarting it from position 0.
+        /// User pressed rewind button.
+        /// This will rewind the sequencer, effectively restarting it from position 0.
         /// </summary>
-        /// <param name="sender">The button for the reset functionality as Button</param>
+        /// <param name="sender">The button for the rewind functionality as Button</param>
         /// <param name="e">RoutedEventArgs</param>
-        private void ResetSequencer(object sender, RoutedEventArgs e)
+        private void RewindSequencer(object sender, RoutedEventArgs e)
         {
             this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
             this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);

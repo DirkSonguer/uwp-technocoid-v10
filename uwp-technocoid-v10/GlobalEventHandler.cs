@@ -96,14 +96,14 @@ namespace uwp_technocoid_v10
             }
         }
 
-        // An event indicating that a MIDI message has been received.
+        // An event indicating that a MIDI event has been received.
         // Classes can subscribe to this event and get notified.
-        public event PropertyChangedEventHandler MidiMessageReceived;
-        public void NotifyMidiMessageReceived(MidiEvent receivedMidiMessage)
+        public event PropertyChangedEventHandler MidiEventReceived;
+        public void NotifyMidiEventReceived(MidiEvent receivedMidiEvent)
         {
-            if (MidiMessageReceived != null)
+            if (MidiEventReceived != null)
             {
-                MidiMessageReceived(receivedMidiMessage, new PropertyChangedEventArgs("MidiEvent receivedMidiMessage"));
+                MidiEventReceived(receivedMidiEvent, new PropertyChangedEventArgs("MidiEvent receivedMidiEvent"));
             }
         }
 
