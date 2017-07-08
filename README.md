@@ -37,7 +37,6 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 
 # To Do
 
-- MIDI input.
 - Fullscreen option for player window.
 - Handle close events properly.
 - The whole thing is slow and stutters / flickers. Maybe I'll fix that.

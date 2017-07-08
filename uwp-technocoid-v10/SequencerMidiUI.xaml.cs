@@ -117,7 +117,7 @@ namespace uwp_technocoid_v10
              CoreDispatcherPriority.Normal, () =>
              {
                  MidiEvent midiEvent = (MidiEvent)receivedMidiEvent;
-                 statusTextControl.Text = "MIDI controller message received of type: " + midiEvent.type + " and value: " + midiEvent.value;
+                 statusTextControl.Text = "MIDI message received, type: " + midiEvent.type + ", value: " + midiEvent.value;
              });
         }
 

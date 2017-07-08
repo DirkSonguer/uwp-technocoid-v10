@@ -104,7 +104,8 @@ namespace uwp_technocoid_v10
                          if (this.globalSequencerDataInstance.currentlyActiveTrack < 3)
                          {
                              this.globalSequencerDataInstance.currentlyActiveTrack += 1;
-                         } else
+                         }
+                         else
                          {
                              this.globalSequencerDataInstance.currentlyActiveTrack = 0;
                          }
@@ -114,19 +115,27 @@ namespace uwp_technocoid_v10
                      if (this.globalSequencerDataInstance.currentlyActiveTrack == selectedTrack)
                      {
                          TrackActivationIndicator.Fill = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
-                     } else
+                     }
+                     else
                      {
                          TrackActivationIndicator.Fill = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
                      }
                  }
 
-                 // Interpret Opacity change.
-                 if (midiEvent.type == MidiEventType.OpacityChange)
+                 // Interpret opacity change.
+                 if ((int)midiEvent.type == selectedTrack)
                  {
-                     // Change the activity indicator colors according to the currently active state.
+                     OpacitySlider.Value = midiEvent.value;
+                 }
+
+                 // Interpret slot activation.
+                 if ((int)midiEvent.type >= (int)MidiEventType.Slot0Toggle)
+                 {
                      if (this.globalSequencerDataInstance.currentlyActiveTrack == selectedTrack)
                      {
-                         OpacitySlider.Value = midiEvent.value;
+                         int slotToActivate = (int)midiEvent.type - (int)MidiEventType.Slot0Toggle;
+                         Button slotActivationButton = (Button)this.FindName("Slot" + slotToActivate.ToString() + "Active");
+                         this.ActivateSlot(slotActivationButton, null);
                      }
                  }
              });

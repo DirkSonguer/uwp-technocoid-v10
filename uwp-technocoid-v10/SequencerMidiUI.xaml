@@ -10,33 +10,38 @@
     d:DesignWidth="480">
 
     <Grid>
-        <StackPanel x:Name="midiMainControls" Visibility="Collapsed" Orientation="Horizontal" HorizontalAlignment="Center" Padding="10, 10, 20, 10">
-            <StackPanel Orientation="Vertical" Width="180">
-                <TextBlock x:Name="statusTextControl" Margin="10,0,10,0" FontSize="10" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select function to learn MIDI command."/>
-                <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                    <Button x:Name="MidiEventType1" Margin="0,0,10,0" Background="#2c2c2c" Content="BPM" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType0" Margin="0,0,10,0" Background="#2c2c2c" Content="Opacity" FontSize="8" Click="LearnMidiCommand"/>
+        <StackPanel x:Name="midiMainControls" Visibility="Collapsed" Orientation="Vertical" HorizontalAlignment="Center" Padding="10, 10, 20, 0">
+            <TextBlock x:Name="statusTextControl" Margin="10,0,10,0" FontSize="10" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Select function to learn MIDI command."/>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Width="180">
+                    <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                        <Button x:Name="MidiEventType4" Margin="0,0,10,0" Padding="0,5,0,5" Width="30" Background="#2c2c2c" Content="BPM" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType5" Margin="0,0,10,0" Padding="0,5,0,5" Width="30" Background="#2c2c2c" Content="&#xE102;" FontFamily="Segoe UI Symbol" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType6" Margin="0,0,10,0" Padding="0,5,0,5" Width="30" Background="#2c2c2c" Content="&#xE100;" FontFamily="Segoe UI Symbol" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType7" Margin="0,0,10,0" Padding="0,5,0,5" Width="30" Background="#2c2c2c" Content="Trk" FontSize="8" Click="LearnMidiCommand"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                        <Button x:Name="MidiEventType0" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="O1" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType1" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="O2" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType2" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="O3" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType3" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="O4" FontSize="8" Click="LearnMidiCommand"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                        <Button x:Name="MidiEventType8" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="S1" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType9" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="S2" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType10" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="S3" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType11" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="S4" FontSize="8" Click="LearnMidiCommand"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                        <Button x:Name="MidiEventType12" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="S5" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType13" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="S6" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType14" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="S7" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType15" Margin="0,0,10,0" Width="30" Background="#2c2c2c" Content="S8" FontSize="8" Click="LearnMidiCommand"/>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                    <Button x:Name="MidiEventType2" Margin="0,0,10,0" Background="#2c2c2c" Content="Play" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType3" Margin="0,0,10,0" Background="#2c2c2c" Content="Rewind" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType4" Margin="0,0,10,0" Background="#2c2c2c" Content="Track" FontSize="8" Click="LearnMidiCommand"/>
+                <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                    <ListBox x:Name="midiInputDeviceListBox" SelectionChanged="SelectedMidiDeviceChanged"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                    <Button x:Name="MidiEventType5" Margin="0,0,10,0" Background="#2c2c2c" Content="S1" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType6" Margin="0,0,10,0" Background="#2c2c2c" Content="S2" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType7" Margin="0,0,10,0" Background="#2c2c2c" Content="S3" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType8" Margin="0,0,10,0" Background="#2c2c2c" Content="S4" FontSize="8" Click="LearnMidiCommand"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                    <Button x:Name="MidiEventType9" Margin="0,0,10,0" Background="#2c2c2c" Content="S5" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType10" Margin="0,0,10,0" Background="#2c2c2c" Content="S6" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType11" Margin="0,0,10,0" Background="#2c2c2c" Content="S7" FontSize="8" Click="LearnMidiCommand"/>
-                    <Button x:Name="MidiEventType12" Margin="0,0,10,0" Background="#2c2c2c" Content="S8" FontSize="8" Click="LearnMidiCommand"/>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <ListBox x:Name="midiInputDeviceListBox" SelectionChanged="SelectedMidiDeviceChanged"/>
             </StackPanel>
         </StackPanel>
     </Grid>

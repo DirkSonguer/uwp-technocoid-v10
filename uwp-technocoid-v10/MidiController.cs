@@ -16,19 +16,22 @@ namespace uwp_technocoid_v10
     // not messages themselves.
     enum MidiEventType
     {
-        OpacityChange = 0,
-        BPMChange = 1,
-        PlayToggle = 2,
-        RewindToggle = 3,
-        TrackSelect = 4,
-        Slot0Toggle = 5,
-        Slot1Toggle = 6,
-        Slot2Toggle = 7,
-        Slot3Toggle = 8,
-        Slot4Toggle = 9,
-        Slot5Toggle = 10,
-        Slot6Toggle = 11,
-        Slot7Toggle = 12,
+        Opacity0Change = 0,
+        Opacity1Change = 1,
+        Opacity2Change = 2,
+        Opacity3Change = 3,
+        BPMChange = 4,
+        PlayToggle = 5,
+        RewindToggle = 6,
+        TrackSelect = 7,
+        Slot0Toggle = 8,
+        Slot1Toggle = 9,
+        Slot2Toggle = 10,
+        Slot3Toggle = 11,
+        Slot4Toggle = 12,
+        Slot5Toggle = 13,
+        Slot6Toggle = 14,
+        Slot7Toggle = 15,
         Empty = 99
     };
 
@@ -218,7 +221,7 @@ namespace uwp_technocoid_v10
                 learnedMidiEvent.rawOriginalMessage = rawMidiMessage;
 
                 // Check if the message to learn is a ranged value.
-                if ((int)this.midiLearningType < 2)
+                if ((int)this.midiLearningType < 5)
                 {
                     // Ranged values are treated as controllers.
                     if (rawMidiMessage.Type == MidiMessageType.ControlChange)
@@ -256,7 +259,7 @@ namespace uwp_technocoid_v10
             {
                 // If so, check all controller based events if the message is relevant.
                 MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)args.Message;
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     if (this.learnedMidiTriggers[i].id == currentMidiMessage.Controller)
                     {
@@ -273,7 +276,7 @@ namespace uwp_technocoid_v10
             {
                 // If so, check all note based events if the message is relevant.
                 MidiNoteOnMessage currentMidiMessage = (MidiNoteOnMessage)args.Message;
-                for (int i = 2; i < Enum.GetNames(typeof(MidiEventType)).Length; i++)
+                for (int i = 5; i < Enum.GetNames(typeof(MidiEventType)).Length; i++)
                 {
                     if (this.learnedMidiTriggers[i].id == currentMidiMessage.Note)
                     {
