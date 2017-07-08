@@ -28,7 +28,8 @@ namespace uwp_technocoid_v10
         Slot4Toggle = 9,
         Slot5Toggle = 10,
         Slot6Toggle = 11,
-        Slot7Toggle = 12
+        Slot7Toggle = 12,
+        Empty = 99
     };
 
     /// <summary>
@@ -243,6 +244,9 @@ namespace uwp_technocoid_v10
                 this.learnedMidiTriggers[(int)this.midiLearningType] = learnedMidiEvent;
                 this.midiLearningActive = false;
 
+                // Notify that the event has been learned. 
+                this.globalEventHandlerInstance.NotifyMidiEventLearned(this.midiLearningType);
+
                 // Do not continue to analyze the input.
                 return;
             }
@@ -290,8 +294,15 @@ namespace uwp_technocoid_v10
         /// <param name="e">PropertyChangedEventArgs</param>
         private void LearnMidiEvent(object midiEventToLearn, PropertyChangedEventArgs e)
         {
-            this.midiLearningActive = true;
-            this.midiLearningType = (MidiEventType)midiEventToLearn;
+            if ((MidiEventType)midiEventToLearn != MidiEventType.Empty)
+            {
+                this.midiLearningActive = true;
+                this.midiLearningType = (MidiEventType)midiEventToLearn;
+            } else
+            {
+                this.midiLearningActive = false;
+                this.midiLearningType = (MidiEventType)midiEventToLearn;
+            }
         }
     }
 }

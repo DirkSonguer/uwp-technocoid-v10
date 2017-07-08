@@ -6,6 +6,7 @@ using System.Text;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
 
 namespace uwp_technocoid_v10
 {
@@ -74,6 +75,17 @@ namespace uwp_technocoid_v10
             }
         }
 
+        // An event indicating that MIDI controls should be visible.
+        // Classes can subscribe to this event and get notified.
+        public event PropertyChangedEventHandler MidiControlsVisibilityChanged;
+        public void NotifyMidiControlsVisibilityChangedd(Visibility requestedVisibilityMode)
+        {
+            if (MidiControlsVisibilityChanged != null)
+            {
+                MidiControlsVisibilityChanged(requestedVisibilityMode, new PropertyChangedEventArgs("Visibility requestedVisibilityMode"));
+            }
+        }
+
         // An event indicating that the available MIDI devices have changed.
         // Classes can subscribe to this event and get notified.
         public event PropertyChangedEventHandler AvailableMidiDevicesChanged;
@@ -117,5 +129,17 @@ namespace uwp_technocoid_v10
                 LearnMidiEvent(midiEventToLearn, new PropertyChangedEventArgs("MidiEventType midiEventToLearn"));
             }
         }
+
+        // MIDI event that has been learned.
+        // Classes can subscribe to this event and get notified.
+        public event PropertyChangedEventHandler MidiEventLearned;
+        public void NotifyMidiEventLearned(MidiEventType midiEventLearned)
+        {
+            if (MidiEventLearned != null)
+            {
+                MidiEventLearned(midiEventLearned, new PropertyChangedEventArgs("MidiEventType midiEventLearned"));
+            }
+        }
+
     }
 }

@@ -338,6 +338,25 @@ namespace uwp_technocoid_v10
         private void ToggleFullscreen(object sender, RoutedEventArgs e)
         {
             this.globalEventHandlerInstance.NotifyFullscreenModeChanged(true);
+
+            // TODO: Implement!
+            statusTextControl.Text = "This button does nothing yet.";
+        }
+
+        private void ToggleMidiControls(object sender, RoutedEventArgs e)
+        {
+            if (((SolidColorBrush)toggleMidiControls.Background).Color == Color.FromArgb(255, 44, 44, 44))
+            {
+                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
+                this.globalEventHandlerInstance.NotifyMidiControlsVisibilityChangedd(Visibility.Visible);
+                statusTextControl.Text = "Showing MIDI controls.";
+            }
+            else
+            {
+                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+                this.globalEventHandlerInstance.NotifyMidiControlsVisibilityChangedd(Visibility.Collapsed);
+                statusTextControl.Text = "Hiding MIDI controls.";
+            }
         }
     }
 }

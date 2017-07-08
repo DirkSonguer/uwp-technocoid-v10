@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Devices.Midi;
 using System.ComponentModel;
 using Windows.UI.Core;
+using Windows.UI;
 
 namespace uwp_technocoid_v10
 {
@@ -45,23 +46,25 @@ namespace uwp_technocoid_v10
             midiController = new MidiController();
             midiController.StartWatcher();
 
+            // Register event to toggle the MIDI control UI.
+            this.globalEventHandlerInstance.MidiControlsVisibilityChanged += this.ToggleMidiControls;
+
             // Register events if the available MIDI devices have changed and if a MIDI message was received.
             this.globalEventHandlerInstance.AvailableMidiDevicesChanged += this.UpdateMidiDeviceList;
             this.globalEventHandlerInstance.MidiEventReceived += this.MidiEventReceived;
 
+            // Register event that a new MIDI event has been learned.
+            this.globalEventHandlerInstance.MidiEventLearned += this.MidiEventLearned;
         }
 
-        private void ToggleMidiControls(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// User wants to see MIDI controls.
+        /// </summary>
+        /// <param name="requestedVisibilityMode">Visibility option</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        private void ToggleMidiControls(object requestedVisibilityMode, PropertyChangedEventArgs e)
         {
-            if (midiMainControls.Visibility != Visibility.Visible)
-            {
-                midiMainControls.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                midiMainControls.Visibility = Visibility.Collapsed;
-
-            }
+            midiMainControls.Visibility = (Visibility)requestedVisibilityMode;
         }
 
         /// <summary>
@@ -104,7 +107,7 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
-        /// A new MIDI event has been received.
+        /// A new MIDI event has been received. Just output it in the status text box.
         /// </summary>
         /// <param name="receivedMidiEvent">Received MIDI event as MidiEvent object</param>
         /// <param name="e">PropertyChangedEventArgs</param>
@@ -125,12 +128,51 @@ namespace uwp_technocoid_v10
         /// <param name="e">RoutedEventArgs</param>
         private void LearnMidiCommand(object learnCommandButton, RoutedEventArgs e)
         {
-            // Get ID of the MIDI event type.
-            var eventType = (learnCommandButton as Button).Name.Substring(13);
-            MidiEventType midiEventToLearn = (MidiEventType)int.Parse(eventType);
+            // Check if the button is already active, indicating an active learning session already.
+            if (((SolidColorBrush)(learnCommandButton as Button).Background).Color == Color.FromArgb(255, 44, 44, 44))
+            {
+                // Clear all button highlights.
+                for (int i = 0; i < 13; i++)
+                {
+                    Button currentButtonElement = (Button)this.FindName("MidiEventType" + i.ToString());
+                    currentButtonElement.Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+                }
 
-            // Notify subscribers about learning a new MIDI event.
-            this.globalEventHandlerInstance.NotifyLearnMidiEvent(midiEventToLearn);
+                // Highlight the relevant button.
+                (learnCommandButton as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
+
+                // Get ID of the MIDI event type.
+                var eventType = (learnCommandButton as Button).Name.Substring(13);
+                MidiEventType midiEventToLearn = (MidiEventType)int.Parse(eventType);
+
+                // Notify subscribers about learning a new MIDI event.
+                this.globalEventHandlerInstance.NotifyLearnMidiEvent(midiEventToLearn);
+            }
+            else
+            {
+                // Reset button color.
+                (learnCommandButton as Button).Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+
+                // Notify subscribers that no MIDI event should be learned.
+                this.globalEventHandlerInstance.NotifyLearnMidiEvent(MidiEventType.Empty);
+            }
+        }
+
+        /// <summary>
+        /// A new MIDI event has been learned.
+        /// </summary>
+        /// <param name="midiEventLearned">Learned MIDI event as MidiEvent object</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        private async void MidiEventLearned(object midiEventLearned, PropertyChangedEventArgs e)
+        {
+            await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
+             CoreDispatcherPriority.Normal, () =>
+             {
+                 // Find the button associated with the learned event and reset the color.
+                 Button currentButtonElement = (Button)this.FindName("MidiEventType" + ((int)midiEventLearned).ToString());
+                 currentButtonElement.Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+                 statusTextControl.Text = "MIDI event learned: " + midiEventLearned.ToString();
+             });
         }
     }
 }
