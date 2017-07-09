@@ -43,6 +43,7 @@ namespace uwp_technocoid_v10
             // Get an instance to the event handler.
             this.globalEventHandlerInstance = GlobalEventHandler.GetInstance();
 
+            // Subscribe to MIDI events.
             this.globalEventHandlerInstance.MidiEventReceived += this.MidiEventReceived;
 
             // Get an instance to the sequencer data handler.
@@ -58,7 +59,7 @@ namespace uwp_technocoid_v10
             CoreWindow.GetForCurrentThread().KeyDown += Keyboard_KeyDown;
 
             // Set the initial BPM to 60.
-            currentBpmOutput.Text = "60";
+            currentBpmSlider.Value = 60;
         }
 
         /// <summary>
@@ -229,7 +230,7 @@ namespace uwp_technocoid_v10
             // Convert and set the BPM. Note that we just set the TextBox value,
             // which will set the sequencer BPM.
             int currentBpm = Convert.ToInt32(currentBpmSlider.Value);
-            if (currentBpm > 119)
+            if (currentBpm > 59)
             {
                 currentBpm = currentBpm / 2;
                 currentBpmSlider.Value = currentBpm;
@@ -263,7 +264,7 @@ namespace uwp_technocoid_v10
             // Convert and set the BPM. Note that we just set the TextBox value,
             // which will set the sequencer BPM.
             int currentBpm = Convert.ToInt32(currentBpmSlider.Value);
-            if (currentBpm > 69)
+            if (currentBpm > 39)
             {
                 currentBpm -= 10;
                 currentBpmSlider.Value = currentBpm;

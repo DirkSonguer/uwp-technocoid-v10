@@ -7,9 +7,18 @@ Note that the goal of this app was not to create a polished VJ app, but to learn
 basics of Windows 10 UWP development. So assume that the code is probably not the best
 source of reference on how to implement things.
 
-Author: Dirk Songuer
-Contact: dirk@songuer.de
-Link: https://github.com/DirkSonguer/uwp-technocoid-v10
+- Author: Dirk Songuer
+- Contact: dirk@songuer.de
+- Link: https://github.com/DirkSonguer/uwp-technocoid-v10
+
+
+# Features
+
+- 4 track, 8 step sequencer.
+- Assign and trigger videos at each step.
+- Set opacity for each track to mix video output.
+- BPM control.
+- Full MIDI control.
 
 
 # Manual
@@ -34,6 +43,8 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 
 ![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_intro4.png "Technocoid Intro 4")
 
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_intro5.png "Technocoid Intro 5")
+
 
 # To Do
 
@@ -47,7 +58,13 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 
 
 # Screenshots
-![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_main.png "Technocoid Controller Window")
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_screen1.png "Technocoid v10 Screenshot")
+
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_screen2.png "Technocoid v10 Screenshot")
+
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_screen3.png "Technocoid v10 Screenshot")
+
+![alt text](https://github.com/DirkSonguer/uwp-technocoid-v10/blob/master/screenshots/tcdv10_screen4.png "Technocoid v10 Screenshot")
 
 
 # History

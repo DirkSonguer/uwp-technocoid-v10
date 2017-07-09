@@ -86,24 +86,27 @@ namespace uwp_technocoid_v10
         /// <param name="e">PropertyChangedEventArgs</param>
         public async void UpdateMidiDeviceList(object empty, PropertyChangedEventArgs e)
         {
-            await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
-             CoreDispatcherPriority.Normal, () =>
-             {
+            if (this.globalEventHandlerInstance.controllerDispatcher != null)
+            {
+                await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
+                 CoreDispatcherPriority.Normal, () =>
+                 {
                  // Clear the current MIDI device list.
                  midiInputDeviceListBox.Items.Clear();
 
                  // If no MIDI devices could be found, add an information.
                  if (midiController.availableMidiDevices.Count == 0)
-                 {
-                     midiInputDeviceListBox.Items.Add("No MIDI devices found!");
-                 }
+                     {
+                         midiInputDeviceListBox.Items.Add("No MIDI devices found!");
+                     }
 
                  // Iterate through the MIDI device list and add them to the list.
                  foreach (var deviceInformation in midiController.availableMidiDevices)
-                 {
-                     midiInputDeviceListBox.Items.Add(deviceInformation.Name);
-                 }
-             });
+                     {
+                         midiInputDeviceListBox.Items.Add(deviceInformation.Name);
+                     }
+                 });
+            }
         }
 
         /// <summary>
