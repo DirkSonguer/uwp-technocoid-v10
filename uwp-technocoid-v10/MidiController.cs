@@ -173,7 +173,7 @@ namespace uwp_technocoid_v10
         private async void SelectedMidiDeviceChanged(object selectedMidiDeviceIndex, PropertyChangedEventArgs e)
         {
             // Check that the current list of devices actually contains any devices.
-            if (this.availableMidiDevices == null)
+            if ((this.availableMidiDevices == null) || (this.availableMidiDevices.Count < 1))
             {
                 return;
             }

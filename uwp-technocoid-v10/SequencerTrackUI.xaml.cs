@@ -30,6 +30,9 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
+        // Cache for the current theme button color.
+        SolidColorBrush themeButtonColor;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -47,7 +50,11 @@ namespace uwp_technocoid_v10
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
             this.globalEventHandlerInstance.MidiEventReceived += this.MidiEventReceived;
+
+            // Store current theme button color.
+            this.themeButtonColor = (SolidColorBrush)Slot0Button.Background;
         }
+
 
         /// <summary>
         /// Highlight the given slot in the track UI.
@@ -273,7 +280,7 @@ namespace uwp_technocoid_v10
             }
             else
             {
-                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+                (sender as Button).Background = this.themeButtonColor;
             }
         }
 
@@ -384,7 +391,7 @@ namespace uwp_technocoid_v10
 
                 // Clear the slot button.
                 Button videoSlotToClear = (Button)this.FindName("Slot" + i.ToString() + "Button");
-                videoSlotToClear.Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+                videoSlotToClear.Background = this.themeButtonColor;
             }
         }
     }

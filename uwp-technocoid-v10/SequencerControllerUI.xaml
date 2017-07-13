@@ -9,29 +9,29 @@
     d:DesignHeight="180"
     d:DesignWidth="500">
 
-    <Grid>
+    <Grid Background="Transparent">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Padding="20, 10, 20, 10">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <Button  x:Name="startSequencerButton" Width="50" Height="50" Margin="0,0,10,0" Background="#2c2c2c" Click="StartSequencer" Content="&#xE102;" FontFamily="Segoe UI Symbol"/>
-                    <Button  x:Name="rewindSequencerButton" Width="50" Height="50" Margin="0,20,10,0" Background="#2c2c2c" Click="RewindSequencer" Content="&#xE100;" FontFamily="Segoe UI Symbol"/>
+                    <Button  x:Name="StartSequencerButton" Width="50" Height="50" Margin="0,0,10,0" Click="StartSequencer" Content="&#xE102;" FontFamily="Segoe UI Symbol"/>
+                    <Button  x:Name="RewindSequencerButton" Width="50" Height="50" Margin="0,20,10,0" Click="RewindSequencer" Content="&#xE100;" FontFamily="Segoe UI Symbol"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Width="300">
                     <Grid>
-                        <TextBlock x:Name="statusTextControl" Margin="10,0,10,10" FontSize="10" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Ready."/>
+                        <TextBlock x:Name="StatusTextControl" Margin="10,0,10,10" FontSize="10" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Ready."/>
                     </Grid>
-                    <TextBlock x:Name="currentBpmOutput" Margin="0,0,0,0" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Text="BPM"/>
-                    <Slider x:Name="currentBpmSlider" Margin="0,10,0,0" VerticalAlignment="Center" Width="200" Minimum="30" Maximum="240" ValueChanged="CurrentBpmChanged"/>
+                    <TextBlock x:Name="CurrentBpmOutput" Margin="0,0,0,0" FontSize="50" VerticalAlignment="Center" TextAlignment="Center" Text="BPM"/>
+                    <Slider x:Name="CurrentBpmSlider" Margin="0,10,0,0" VerticalAlignment="Center" Width="200" Minimum="30" Maximum="240" ValueChanged="CurrentBpmChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                    <Button x:Name="minusTenBpmButton" Margin="0,0,0,0" Width="30" Height="30" Padding="0" Background="#2c2c2c" FontSize="8" Content="-10" Click="MinusTenBpm" />
-                    <Button x:Name="plusTenBpmButton" Margin="0,10,0,0" Width="30" Height="30" Padding="0" Background="#2c2c2c" FontSize="8" Content="+10" Click="PlusTenBpm" />
-                    <Button x:Name="halfCurrentBpmButton" Margin="0,10,0,0" Width="30" Height="30" Padding="0" Background="#2c2c2c" FontSize="8" Content="1/2" Click="HalfCurrentBpm" />
-                    <Button x:Name="doubleCurrentBpmButton" Margin="0,10,0,0" Width="30" Height="30" Padding="0" Background="#2c2c2c" FontSize="8" Content="*2" Click="DoubleCurrentBpm" />
+                    <Button x:Name="MinusTenBpmButton" Margin="0,0,0,0" Width="30" Height="30" Padding="0" FontSize="8" Content="-10" Click="MinusTenBpm" />
+                    <Button x:Name="PlusTenBpmButton" Margin="0,10,0,0" Width="30" Height="30" Padding="0" FontSize="8" Content="+10" Click="PlusTenBpm" />
+                    <Button x:Name="HalfCurrentBpmButton" Margin="0,10,0,0" Width="30" Height="30" Padding="0" FontSize="8" Content="1/2" Click="HalfCurrentBpm" />
+                    <Button x:Name="DoubleCurrentBpmButton" Margin="0,10,0,0" Width="30" Height="30" Padding="0" FontSize="8" Content="*2" Click="DoubleCurrentBpm" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Margin="30,0,0,0">
-                    <Button x:Name="toggleFullscreenButton" Margin="0,0,0,0" Width="30" Height="30" Padding="0" Background="#2c2c2c" FontSize="8" Content="&#xE18C;" FontFamily="Segoe UI Symbol" Click="ToggleFullscreen" />
-                    <Button x:Name="toggleMidiControls" Margin="0,10,0,0" Width="30" Height="30" Padding="0" Background="#2c2c2c" FontSize="8" Content="&#xE08F;" FontFamily="Segoe UI Symbol" Click="ToggleMidiControls"/>
+                    <Button x:Name="ToggleFullscreenButton" Margin="0,0,0,0" Width="30" Height="30" Padding="0" FontSize="8" Content="&#xE18C;" FontFamily="Segoe UI Symbol" Click="ToggleFullscreen" />
+                    <Button x:Name="ToggleMidiControlsButton" Margin="0,10,0,0" Width="30" Height="30" Padding="0" FontSize="8" Content="&#xE08F;" FontFamily="Segoe UI Symbol" Click="ToggleMidiControls"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

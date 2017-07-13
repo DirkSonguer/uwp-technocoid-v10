@@ -27,6 +27,9 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
+        // Cache for the current theme button color.
+        SolidColorBrush themeButtonColor;
+
         // Temp cache for the user tap input.
         private long[] bpmTapTimer = new long[5];
 
@@ -58,14 +61,16 @@ namespace uwp_technocoid_v10
             // Register for the keyboard input event to register taps.
             CoreWindow.GetForCurrentThread().KeyDown += Keyboard_KeyDown;
 
+            // Store current theme button color.
+            this.themeButtonColor = (SolidColorBrush)StartSequencerButton.Background;
+
             // Set the initial BPM to 60.
-            currentBpmSlider.Value = 60;
+            CurrentBpmSlider.Value = 60;
         }
 
         /// <summary>
-        /// This is a very quick & dirty implementation of a tap-to-BPM.
-        /// If the user taps the space bar, the BPM will be calculated based
-        /// on their tap speed.
+        /// Keyboard input has been detected.
+        /// The input will be redirected to the respective funtionality.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
@@ -117,20 +122,20 @@ namespace uwp_technocoid_v10
                  // Interpret BPM change.
                  if (midiEvent.type == MidiEventType.BPMChange)
                  {
-                     currentBpmSlider.Value = (midiEvent.value * 2);
+                     CurrentBpmSlider.Value = (midiEvent.value * 2);
 
                  }
 
                  // Interpret Play toggle.
                  if (midiEvent.type == MidiEventType.PlayToggle)
                  {
-                     this.StartSequencer(startSequencerButton, null);
+                     this.StartSequencer(StartSequencerButton, null);
                  }
 
                  // Interpret Rewind toggle.
                  if (midiEvent.type == MidiEventType.RewindToggle)
                  {
-                     this.RewindSequencer(rewindSequencerButton, null);
+                     this.RewindSequencer(RewindSequencerButton, null);
                  }
              });
         }
@@ -146,14 +151,15 @@ namespace uwp_technocoid_v10
             if (this.globalSequencerControllerInstance != null)
             {
                 // Convert the input to a number and update the BPM for the sequencer.
-                this.globalSequencerControllerInstance.UpdateBPM(Convert.ToInt32(currentBpmSlider.Value));
-                currentBpmOutput.Text = currentBpmSlider.Value.ToString();
+                this.globalSequencerControllerInstance.UpdateBPM(Convert.ToInt32(CurrentBpmSlider.Value));
+                CurrentBpmOutput.Text = CurrentBpmSlider.Value.ToString();
             }
         }
 
         /// <summary>
-        /// A tap has been detected as part opf the BPM detection.
-        /// The new BPM count is calculated from the average time between individual taps.
+        /// This is a very quick & dirty implementation of a tap-to-BPM.
+        /// If the user taps the space bar, the BPM will be calculated based
+        /// on their tap speed from the average time between individual taps.
         /// </summary>
         private void TapDetectionTriggered()
         {
@@ -214,8 +220,8 @@ namespace uwp_technocoid_v10
                 {
                     bpmAverage = bpmAverage / 10000;
                     int newBPM = Convert.ToInt32(60000 / bpmAverage);
-                    currentBpmSlider.Value = newBPM;
-                    statusTextControl.Text = "New BPM set.";
+                    CurrentBpmSlider.Value = newBPM;
+                    StatusTextControl.Text = "New BPM set.";
                 }
             }
         }
@@ -229,11 +235,11 @@ namespace uwp_technocoid_v10
         {
             // Convert and set the BPM. Note that we just set the TextBox value,
             // which will set the sequencer BPM.
-            int currentBpm = Convert.ToInt32(currentBpmSlider.Value);
+            int currentBpm = Convert.ToInt32(CurrentBpmSlider.Value);
             if (currentBpm > 59)
             {
                 currentBpm = currentBpm / 2;
-                currentBpmSlider.Value = currentBpm;
+                CurrentBpmSlider.Value = currentBpm;
             }
         }
 
@@ -246,11 +252,11 @@ namespace uwp_technocoid_v10
         {
             // Convert and set the BPM. Note that we just set the TextBox value,
             // which will set the sequencer BPM.
-            int currentBpm = Convert.ToInt32(currentBpmSlider.Value);
+            int currentBpm = Convert.ToInt32(CurrentBpmSlider.Value);
             if (currentBpm < 121)
             {
                 currentBpm *= 2;
-                currentBpmSlider.Value = currentBpm;
+                CurrentBpmSlider.Value = currentBpm;
             }
         }
 
@@ -263,11 +269,11 @@ namespace uwp_technocoid_v10
         {
             // Convert and set the BPM. Note that we just set the TextBox value,
             // which will set the sequencer BPM.
-            int currentBpm = Convert.ToInt32(currentBpmSlider.Value);
+            int currentBpm = Convert.ToInt32(CurrentBpmSlider.Value);
             if (currentBpm > 39)
             {
                 currentBpm -= 10;
-                currentBpmSlider.Value = currentBpm;
+                CurrentBpmSlider.Value = currentBpm;
             }
         }
 
@@ -280,11 +286,11 @@ namespace uwp_technocoid_v10
         {
             // Convert and set the BPM. Note that we just set the TextBox value,
             // which will set the sequencer BPM.
-            int currentBpm = Convert.ToInt32(currentBpmSlider.Value);
+            int currentBpm = Convert.ToInt32(CurrentBpmSlider.Value);
             if (currentBpm < 231)
             {
                 currentBpm += 10;
-                currentBpmSlider.Value = currentBpm;
+                CurrentBpmSlider.Value = currentBpm;
             }
         }
 
@@ -296,17 +302,17 @@ namespace uwp_technocoid_v10
         /// <param name="e">RoutedEventArgs</param>
         private void StartSequencer(object sender, RoutedEventArgs e)
         {
-            if ("\uE102" == startSequencerButton.Content.ToString())
+            if ("\uE102" == StartSequencerButton.Content.ToString())
             {
-                startSequencerButton.Content = "\uE103";
+                StartSequencerButton.Content = "\uE103";
                 this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
                 (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
             }
             else
             {
-                startSequencerButton.Content = "\uE102";
+                StartSequencerButton.Content = "\uE102";
                 this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
-                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+                (sender as Button).Background = this.themeButtonColor;
             }
         }
 
@@ -328,7 +334,7 @@ namespace uwp_technocoid_v10
         /// <param name="newStatusMessage">String with the new status message</param>
         public void SetStatusMessage(String newStatusMessage)
         {
-            statusTextControl.Text = newStatusMessage;
+            StatusTextControl.Text = newStatusMessage;
         }
 
         /// <summary>
@@ -341,22 +347,22 @@ namespace uwp_technocoid_v10
             this.globalEventHandlerInstance.NotifyFullscreenModeChanged(true);
 
             // TODO: Implement!
-            statusTextControl.Text = "This button does nothing yet.";
+            StatusTextControl.Text = "This button does nothing yet.";
         }
 
         private void ToggleMidiControls(object sender, RoutedEventArgs e)
         {
-            if (((SolidColorBrush)toggleMidiControls.Background).Color == Color.FromArgb(255, 44, 44, 44))
+            if (((SolidColorBrush)ToggleMidiControlsButton.Background).Color == this.themeButtonColor.Color)
             {
                 (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
                 this.globalEventHandlerInstance.NotifyMidiControlsVisibilityChangedd(Visibility.Visible);
-                statusTextControl.Text = "Showing MIDI controls.";
+                StatusTextControl.Text = "Showing MIDI controls.";
             }
             else
             {
-                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 44, 44, 44));
+                (sender as Button).Background = this.themeButtonColor;
                 this.globalEventHandlerInstance.NotifyMidiControlsVisibilityChangedd(Visibility.Collapsed);
-                statusTextControl.Text = "Hiding MIDI controls.";
+                StatusTextControl.Text = "Hiding MIDI controls.";
             }
         }
     }

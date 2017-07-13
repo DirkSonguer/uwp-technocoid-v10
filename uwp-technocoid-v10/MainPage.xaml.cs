@@ -15,6 +15,12 @@ using System.ComponentModel;
 using Windows.UI.Xaml.Navigation;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
+using Windows.Foundation;
+using Windows.System.Threading;
+using Windows.UI.Composition;
+using Windows.UI.Xaml.Hosting;
+using System.Numerics;
+using Windows.UI;
 
 namespace uwp_technocoid_v10
 {
@@ -28,12 +34,26 @@ namespace uwp_technocoid_v10
         GlobalSequencerData globalSequencerDataInstance;
         GlobalEventHandler globalEventHandlerInstance;
 
+        // Timer to measure if window resize is finished.
+        static ThreadPoolTimer windowResizeTimer;
+
+        // We use acrylic backgrounds as introduced with Fluent Design.
+        // However proper Fluent behavior will be introduced with Build 16190,
+        // so we are currently faking it with using compositors and sprites.
+        // See https://stackoverflow.com/questions/43699256/how-to-use-acrylic-accent-in-windows-10-creators-update
+        Compositor backgroundCompositor;
+        SpriteVisual backgroundHostSprite;
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public MainPage()
         {
             this.InitializeComponent();
+
+            // Setting minimum window size.
+            ApplicationView.PreferredLaunchViewSize = new Size(950, 720);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
             // Explicitly show the title bar.
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
@@ -51,6 +71,9 @@ namespace uwp_technocoid_v10
 
             // Store the current dispatcher to the global event handler.
             this.globalEventHandlerInstance.controllerDispatcher = Dispatcher;
+
+            // Subscribe to the window resize event.
+            Window.Current.CoreWindow.SizeChanged += UpdateUI;
 
             // Initially create the UI.
             CreateUI();
@@ -93,6 +116,60 @@ namespace uwp_technocoid_v10
             // Activate and show the new window.
             bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
             sequencerControls.SetStatusMessage("Player window created, ready.");
+
+
+            backgroundCompositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
+            backgroundHostSprite = backgroundCompositor.CreateSpriteVisual();
+            backgroundHostSprite.Size = new Vector2((float)BackgroundGrid.ActualWidth, (float)BackgroundGrid.ActualHeight);
+
+            ElementCompositionPreview.SetElementChildVisual(BackgroundGrid, backgroundHostSprite);
+            backgroundHostSprite.Brush = backgroundCompositor.CreateHostBackdropBrush();
+        }
+
+        /// <summary>
+        /// Update the UI if the user has resized the window.
+        /// At this point, the window is resized to the minimum size if the user resizes it too small.
+        /// This is considered VERY bad behaviour.
+        /// TODO: Make the UI properly responsive.
+        /// </summary>
+        /// <param name="sender">CoreWindow</param>
+        /// <param name="e">WindowSizeChangedEventArgs containing the new window size</param>
+        public void UpdateUI(CoreWindow sender, WindowSizeChangedEventArgs e)
+        {
+            // Update background sprite first.
+            if (backgroundHostSprite != null)
+            {
+                backgroundHostSprite.Size = e.Size.ToVector2();
+            }
+
+            // Check if the timer is already running.
+            // If so, then cancel it. It will be re-created below if the window is still too small.
+            if (windowResizeTimer != null) windowResizeTimer.Cancel();
+
+            // Get the new window width and height.
+            double newHeight = e.Size.Height;
+            double newWidth = e.Size.Width;
+
+            // Check if the window is too narrow.
+            if ((newWidth < 950) || (newHeight < 720))
+            {
+                // Set the timeout to 1 second.
+                TimeSpan timeout = new TimeSpan(0, 0, 0, 1);
+
+                // Create a new timer. After the timeout, the resize code will be executed.
+                windowResizeTimer = ThreadPoolTimer.CreateTimer(async (ThreadPoolTimer timer) =>
+                {
+                    newWidth = 950;
+                    newHeight = 720;
+
+                    await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
+                     CoreDispatcherPriority.Normal, () =>
+                     {
+                         ApplicationView.GetForCurrentView().TryResizeView(new Size(newWidth, newHeight));
+                     });
+                }, timeout);
+            }
+
         }
 
         /// <summary>
