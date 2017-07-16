@@ -58,6 +58,9 @@ namespace uwp_technocoid_v10
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
+            // Subscribe to window close event.
+            ApplicationView.GetForCurrentView().Consolidated += PlayerWindowClosed;
+
             // Mute and elevate all media players.
             mediaPlayerElementTrack0.MediaPlayer.IsMuted = true;
             mediaPlayerElementTrack0.MediaPlayer.RealTimePlayback = true;
@@ -67,6 +70,16 @@ namespace uwp_technocoid_v10
             mediaPlayerElementTrack2.MediaPlayer.RealTimePlayback = true;
             mediaPlayerElementTrack3.MediaPlayer.IsMuted = true;
             mediaPlayerElementTrack3.MediaPlayer.RealTimePlayback = true;
+        }
+
+        /// <summary>
+        /// Player window has been closed. Exit the app and thus close the main window as a result.
+        /// </summary>
+        /// <param name="sender">ApplicationView</param>
+        /// <param name="e">ApplicationViewConsolidatedEventArgs</param>
+        private void PlayerWindowClosed(object sender, object e)
+        {
+            Application.Current.Exit();
         }
 
         /// <summary>

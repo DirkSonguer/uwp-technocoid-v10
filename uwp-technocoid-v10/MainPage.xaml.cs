@@ -77,8 +77,21 @@ namespace uwp_technocoid_v10
             // Subscribe to the window resize event.
             Window.Current.CoreWindow.SizeChanged += UpdateUI;
 
+            // Subscribe to window close event.
+            ApplicationView.GetForCurrentView().Consolidated += MainWindowClosed;
+
             // Initially create the UI.
             CreateUI();
+        }
+
+        /// <summary>
+        /// Main window has been closed. Exit the app and thus close the player window as a result.
+        /// </summary>
+        /// <param name="sender">ApplicationView</param>
+        /// <param name="e">ApplicationViewConsolidatedEventArgs</param>
+        private void MainWindowClosed(object sender, object e)
+        {
+            Application.Current.Exit();
         }
 
         /// <summary>
