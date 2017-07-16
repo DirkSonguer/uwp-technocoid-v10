@@ -71,9 +71,9 @@ namespace uwp_technocoid_v10
         /// <param name="e">PropertyChangedEventArgs</param>
         private void StartSequencer(object isCurrentlyPlaying, PropertyChangedEventArgs e)
         {
-            isSequencerRunning = (bool)isCurrentlyPlaying;
+            this.isSequencerRunning = (bool)isCurrentlyPlaying;
 
-            if (isSequencerRunning)
+            if (this.isSequencerRunning)
             {
                 this.currentSequencerPosition = 0;
                 masterTimer = ThreadPoolTimer.CreatePeriodicTimer(SequencerMainLoop, this.currentBPMasTimeSpan);

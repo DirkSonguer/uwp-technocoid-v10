@@ -206,6 +206,7 @@ namespace uwp_technocoid_v10
             openPicker.FileTypeFilter.Add(".mp4");
             openPicker.FileTypeFilter.Add(".mkv");
             openPicker.FileTypeFilter.Add(".avi");
+            openPicker.FileTypeFilter.Add(".mov");
 
             // Open the file picker and wait for the result.
             StorageFile file = await openPicker.PickSingleFileAsync();

@@ -78,8 +78,8 @@ I stopped developing it when I discovered [Neon](http://xplsv.com/neon/) and lat
 
 Recently I found myself searching for a simple VJ tool that acted a bit like a video step
 sequencer, much like Neon did, but I wasn't able to find one. Well, to be honest I didn't
-look that well as I figured it would be a nice project to get back into Windows apps and
-check out UWP a little bit.
+really look as I figured it would be a nice project to get back into Windows apps and check
+out UWP a little bit.
 
 
 # Used in Development

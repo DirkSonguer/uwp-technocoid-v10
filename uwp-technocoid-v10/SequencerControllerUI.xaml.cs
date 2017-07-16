@@ -153,6 +153,7 @@ namespace uwp_technocoid_v10
                 // Convert the input to a number and update the BPM for the sequencer.
                 this.globalSequencerControllerInstance.UpdateBPM(Convert.ToInt32(CurrentBpmSlider.Value));
                 CurrentBpmOutput.Text = CurrentBpmSlider.Value.ToString();
+                StatusTextControl.Text = "New BPM set to " + CurrentBpmSlider.Value.ToString();
             }
         }
 
@@ -221,7 +222,6 @@ namespace uwp_technocoid_v10
                     bpmAverage = bpmAverage / 10000;
                     int newBPM = Convert.ToInt32(60000 / bpmAverage);
                     CurrentBpmSlider.Value = newBPM;
-                    StatusTextControl.Text = "New BPM set.";
                 }
             }
         }

@@ -42,6 +42,9 @@ namespace uwp_technocoid_v10
             // Get an instance to the event handler and subscribe to the SequencerPositionChanged event.
             this.globalEventHandlerInstance = GlobalEventHandler.GetInstance();
 
+            // Store the current dispatcher to the global event handler.
+            this.globalEventHandlerInstance.controllerDispatcher = Dispatcher;
+
             // Get an instance to the sequencer data handler.
             this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
@@ -150,7 +153,7 @@ namespace uwp_technocoid_v10
         private void LearnMidiCommand(object learnCommandButton, RoutedEventArgs e)
         {
             // Check if the button is already active, indicating an active learning session already.
-            if (((SolidColorBrush)(learnCommandButton as Button).Background).Color == Color.FromArgb(255, 44, 44, 44))
+            if (((SolidColorBrush)(learnCommandButton as Button).Background).Color == this.themeButtonColor.Color)
             {
                 // Clear all button highlights.
                 for (int i = 0; i < 16; i++)

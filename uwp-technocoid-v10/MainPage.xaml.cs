@@ -41,8 +41,10 @@ namespace uwp_technocoid_v10
         // However proper Fluent behavior will be introduced with Build 16190,
         // so we are currently faking it with using compositors and sprites.
         // See https://stackoverflow.com/questions/43699256/how-to-use-acrylic-accent-in-windows-10-creators-update
-        Compositor backgroundCompositor;
-        SpriteVisual backgroundHostSprite;
+        Compositor sequencerBackgroundCompositor;
+        SpriteVisual sequencerBackgroundHostSprite;
+        Compositor controllerBackgroundCompositor;
+        SpriteVisual controllerBackgroundHostSprite;
 
         /// <summary>
         /// Constructor.
@@ -52,8 +54,11 @@ namespace uwp_technocoid_v10
             this.InitializeComponent();
 
             // Setting minimum window size.
-            ApplicationView.PreferredLaunchViewSize = new Size(950, 720);
+            ApplicationView.PreferredLaunchViewSize = new Size(950, 740);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
+            // Get an instance to the sequencer data handler.
+            this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
             // Explicitly show the title bar.
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
@@ -65,9 +70,6 @@ namespace uwp_technocoid_v10
             this.globalEventHandlerInstance = GlobalEventHandler.GetInstance();
             this.globalEventHandlerInstance.SequencerPositionChanged += this.SequencerTrigger;
             this.globalEventHandlerInstance.CurrentlyPlayingChanged += this.SequencerPlayingChanged;
-
-            // Get an instance to the sequencer data handler.
-            this.globalSequencerDataInstance = GlobalSequencerData.GetInstance();
 
             // Store the current dispatcher to the global event handler.
             this.globalEventHandlerInstance.controllerDispatcher = Dispatcher;
@@ -117,13 +119,19 @@ namespace uwp_technocoid_v10
             bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
             sequencerControls.SetStatusMessage("Player window created, ready.");
 
+            // Get compositor and sprite for acrylic simulation.
+            sequencerBackgroundCompositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
+            sequencerBackgroundHostSprite = sequencerBackgroundCompositor.CreateSpriteVisual();
+            sequencerBackgroundHostSprite.Size = new Vector2((float)SequencerBackground.ActualWidth, (float)SequencerBackground.ActualHeight);
+            controllerBackgroundCompositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
+            controllerBackgroundHostSprite = controllerBackgroundCompositor.CreateSpriteVisual();
+            controllerBackgroundHostSprite.Size = new Vector2((float)ControllerBackground.ActualWidth, (float)ControllerBackground.ActualHeight);
 
-            backgroundCompositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
-            backgroundHostSprite = backgroundCompositor.CreateSpriteVisual();
-            backgroundHostSprite.Size = new Vector2((float)BackgroundGrid.ActualWidth, (float)BackgroundGrid.ActualHeight);
-
-            ElementCompositionPreview.SetElementChildVisual(BackgroundGrid, backgroundHostSprite);
-            backgroundHostSprite.Brush = backgroundCompositor.CreateHostBackdropBrush();
+            // Activate the acrylic material and set it as a background brush for the grid panel in the background.
+            ElementCompositionPreview.SetElementChildVisual(SequencerBackground, sequencerBackgroundHostSprite);
+            sequencerBackgroundHostSprite.Brush = sequencerBackgroundCompositor.CreateHostBackdropBrush();
+            ElementCompositionPreview.SetElementChildVisual(ControllerBackground, controllerBackgroundHostSprite);
+            controllerBackgroundHostSprite.Brush = controllerBackgroundCompositor.CreateHostBackdropBrush();
         }
 
         /// <summary>
@@ -136,10 +144,16 @@ namespace uwp_technocoid_v10
         /// <param name="e">WindowSizeChangedEventArgs containing the new window size</param>
         public void UpdateUI(CoreWindow sender, WindowSizeChangedEventArgs e)
         {
-            // Update background sprite first.
-            if (backgroundHostSprite != null)
+            // Update sequencer background sprite.
+            if (sequencerBackgroundHostSprite != null)
             {
-                backgroundHostSprite.Size = e.Size.ToVector2();
+                sequencerBackgroundHostSprite.Size = e.Size.ToVector2();
+            }
+
+            // Update controller background sprite first.
+            if (controllerBackgroundHostSprite != null)
+            {
+                controllerBackgroundHostSprite.Size = e.Size.ToVector2();
             }
 
             // Check if the timer is already running.
@@ -151,7 +165,7 @@ namespace uwp_technocoid_v10
             double newWidth = e.Size.Width;
 
             // Check if the window is too narrow.
-            if ((newWidth < 950) || (newHeight < 720))
+            if ((newWidth < 950) || (newHeight < 740))
             {
                 // Set the timeout to 1 second.
                 TimeSpan timeout = new TimeSpan(0, 0, 0, 1);
@@ -160,7 +174,7 @@ namespace uwp_technocoid_v10
                 windowResizeTimer = ThreadPoolTimer.CreateTimer(async (ThreadPoolTimer timer) =>
                 {
                     newWidth = 950;
-                    newHeight = 720;
+                    newHeight = 740;
 
                     await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
                      CoreDispatcherPriority.Normal, () =>
