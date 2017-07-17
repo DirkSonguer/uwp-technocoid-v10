@@ -36,6 +36,9 @@ namespace uwp_technocoid_v10
         // The current opacity of the track player.
         public double opacity = 1.0;
 
+        // The current opacity of the track player.
+        public double playbackRate = 1.0;
+
         // Flag if the sequencer is currently selected.
         public bool selected = false;
 
@@ -125,6 +128,29 @@ namespace uwp_technocoid_v10
         public double getOpacityForTrack(int sequencerTrack)
         {
             return tracks[sequencerTrack].opacity;
+        }
+
+        /// <summary>
+        /// Set the playback rate for the given track.
+        /// </summary>
+        /// <param name="sequencerTrack">The track to change the opacity for</param>
+        /// <param name="newTrackOpacity">The new opacity value</param>
+        public void setPlaybackRateForTrack(int sequencerTrack, double newTrackPlaybackRate)
+        {
+            if ((newTrackPlaybackRate >= 0.5) && (newTrackPlaybackRate <= 3.0))
+            {
+                tracks[sequencerTrack].playbackRate = newTrackPlaybackRate;
+            }
+        }
+
+        /// <summary>
+        /// Get the playback rate for the given track.
+        /// </summary>
+        /// <param name="sequencerTrack">Track to get the opacity value for</param>
+        /// <returns></returns>
+        public double getPlaybackRateForTrack(int sequencerTrack)
+        {
+            return tracks[sequencerTrack].playbackRate;
         }
     }
 }

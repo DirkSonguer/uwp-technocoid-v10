@@ -53,6 +53,9 @@ namespace uwp_technocoid_v10
             this.globalEventHandlerInstance.TrackOpacityChanged += this.ChangeOpacity;
 
             // Bind the ChangeOpacity() function to the TrackOpacityChanged event.
+            this.globalEventHandlerInstance.TrackPlaybackRateChanged += this.ChangePlaybackRate;
+
+            // Bind the ChangeOpacity() function to the TrackOpacityChanged event.
             this.globalEventHandlerInstance.FullscreenModeChanged += this.ChangeFullscreen;
 
             // Get an instance to the sequencer data handler.
@@ -168,6 +171,29 @@ namespace uwp_technocoid_v10
                  if (currentMediaPlayerUIElement != null)
                  {
                      currentMediaPlayerUIElement.Opacity = newTrackOpacity;
+                 }
+             });
+        }
+
+        /// <summary>
+        /// A sequencer track changed its playback rate.
+        /// </summary>
+        /// <param name="sequencerTrack">The sequencer track that changed its playback rate</param>
+        /// <param name="e">PropertyChangedEventArgs</param>
+        private async void ChangePlaybackRate(object sequencerTrack, PropertyChangedEventArgs e)
+        {
+            // Get the track to change opacity for.
+            double newTrackPlaybackRate = this.globalSequencerDataInstance.getPlaybackRateForTrack((int)sequencerTrack);
+
+            // Get the correct thread for the media player UI.
+            await this.globalEventHandlerInstance.playerDispatcher.RunAsync(
+             CoreDispatcherPriority.Normal, () =>
+             {
+                 // Get the media player for the respective track and change its opacity.
+                 MediaPlayerElement currentMediaPlayerUIElement = (MediaPlayerElement)this.FindName("mediaPlayerElementTrack" + (int)sequencerTrack);
+                 if (currentMediaPlayerUIElement != null)
+                 {
+                     currentMediaPlayerUIElement.MediaPlayer.PlaybackSession.PlaybackRate = newTrackPlaybackRate;
                  }
              });
         }

@@ -53,7 +53,7 @@ namespace uwp_technocoid_v10
             }
         }
 
-        // An event indicating that the sequencer has been started or stopped.
+        // An event indicating that the opacity for a track has been changed.
         // Classes can subscribe to this event and get notified.
         public event PropertyChangedEventHandler TrackOpacityChanged;
         public void NotifyTrackOpacityChanged(int sequencerTrack)
@@ -61,6 +61,17 @@ namespace uwp_technocoid_v10
             if (TrackOpacityChanged != null)
             {
                 TrackOpacityChanged(sequencerTrack, new PropertyChangedEventArgs("int sequencerTrack"));
+            }
+        }
+
+        // An event indicating that the playback rate (speed) for a track has been changed.
+        // Classes can subscribe to this event and get notified.
+        public event PropertyChangedEventHandler TrackPlaybackRateChanged;
+        public void NotifyTrackPlaybackRateChanged(int sequencerTrack)
+        {
+            if (TrackPlaybackRateChanged != null)
+            {
+                TrackPlaybackRateChanged(sequencerTrack, new PropertyChangedEventArgs("int sequencerTrack"));
             }
         }
 

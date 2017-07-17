@@ -182,6 +182,50 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
+        /// Change the playback rate of the player for the video player.
+        /// </summary>
+        /// <param name="sender">Object for the playback rate slider as Slider</param>
+        /// <param name="e">RangeBaseValueChangedEventArgs</param>
+        private void ChangePlaybackRateForTrack(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            // Get parent element of the slider.
+            var parentSlotStackPanel = (sender as Slider).Parent;
+
+            // Note that this will be null for the first time when the UI
+            // is being created.
+            if (parentSlotStackPanel != null)
+            {
+                // Retrieve slot and track names.
+                var parentPlaybackRateStackPanel = (parentSlotStackPanel as StackPanel).Parent;
+                var parentTrackGrid = (parentPlaybackRateStackPanel as StackPanel).Parent;
+                var parentSequencerTrackUI = (parentTrackGrid as Grid).Parent;
+                var trackName = (parentSequencerTrackUI as SequencerTrackUI).Name;
+
+                // Extract the track ID for the button that triggered the loading event.
+                trackName = trackName.Substring(14);
+                int selectedTrack = 0;
+                selectedTrack = int.Parse(trackName);
+
+                // Set the playback rate for the track.
+                if (this.globalSequencerDataInstance != null)
+                {
+                    this.globalSequencerDataInstance.setPlaybackRateForTrack(selectedTrack, ((sender as Slider).Value / 50));
+                    this.globalEventHandlerInstance.NotifyTrackPlaybackRateChanged(selectedTrack);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Button to reset the playback rate to 1.0.
+        /// </summary>
+        /// <param name="sender">The reset button as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void ResetPlaybackRate(object sender, RoutedEventArgs e)
+        {
+            PlaybackRateSlider.Value = 50;
+        }
+
+        /// <summary>
         /// A sequencer slot has been clicked to load a new video into the
         /// respective slot.
         /// </summary>
