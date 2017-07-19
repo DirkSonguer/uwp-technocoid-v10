@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -15,11 +10,8 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
 
 namespace uwp_technocoid_v10
 {
@@ -133,6 +125,12 @@ namespace uwp_technocoid_v10
                  if ((int)midiEvent.type == selectedTrack)
                  {
                      OpacitySlider.Value = midiEvent.value;
+                 }
+
+                 // Interpret playback rate change.
+                 if ((int)midiEvent.type == (selectedTrack + 4))
+                 {
+                     PlaybackRateSlider.Value = midiEvent.value;
                  }
 
                  // Interpret slot activation.

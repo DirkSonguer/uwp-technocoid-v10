@@ -1,14 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Graphics.Display;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace uwp_technocoid_v10
 {
@@ -31,7 +28,7 @@ namespace uwp_technocoid_v10
         public FullScreenViewer()
         {
             this.InitializeComponent();
-            
+
             // Hide the standard title bar by removing the title bar and making the buttons transparent.
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             ApplicationView.GetForCurrentView().TitleBar.ButtonBackgroundColor = Colors.Transparent;

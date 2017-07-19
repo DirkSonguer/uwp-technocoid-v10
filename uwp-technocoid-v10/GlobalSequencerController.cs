@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using Windows.System.Threading;
 using Windows.UI.Core;
 
@@ -71,15 +69,22 @@ namespace uwp_technocoid_v10
         /// <param name="e">PropertyChangedEventArgs</param>
         private void StartSequencer(object isCurrentlyPlaying, PropertyChangedEventArgs e)
         {
+            // Reverse the current playing state flag for the sequencer.
             this.isSequencerRunning = (bool)isCurrentlyPlaying;
 
+            // If the sequencer should play now, then start a new timer thread.
             if (this.isSequencerRunning)
             {
+                // Make sure the master timer is not running anymore anywhere.
+                if (masterTimer != null) masterTimer.Cancel();
+
+                // Start a new timer at position zero.
                 this.currentSequencerPosition = 0;
                 masterTimer = ThreadPoolTimer.CreatePeriodicTimer(SequencerMainLoop, this.currentBPMasTimeSpan);
             }
             else
             {
+                // Stop the timer.
                 masterTimer.Cancel();
             }
         }
@@ -92,6 +97,8 @@ namespace uwp_technocoid_v10
         /// <param name="timer">Timer object</param>
         private async void SequencerMainLoop(ThreadPoolTimer timer)
         {
+            // Increase the sequencer position by one.
+            // Make sure to roll over.
             var dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
             await dispatcher.RunAsync(
              CoreDispatcherPriority.Normal, () =>
@@ -115,10 +122,15 @@ namespace uwp_technocoid_v10
         /// <param name="newBPM">New BPM as int</param>
         public void UpdateBPM(int newBPM)
         {
+            // Update the BPM in all units.
             this.currentBPM = newBPM;
             this.currentBPMinMS = Convert.ToInt32(60000 / this.currentBPM);
             this.currentBPMasTimeSpan = new TimeSpan(0, 0, 0, 0, this.currentBPMinMS);
 
+            // Restart the timer with the new BPM.
+            // Note: This will cause slight delays - while the sequencer continues at the same step,
+            // the step counter is reset. So max there can be a delay of current BPM count.
+            // TODO: Find a way to fix this with sub-tick accuracy.
             if (this.isSequencerRunning)
             {
                 masterTimer.Cancel();

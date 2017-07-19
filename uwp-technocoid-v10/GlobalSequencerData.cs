@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 
@@ -74,11 +72,13 @@ namespace uwp_technocoid_v10
         /// </summary>
         GlobalSequencerData()
         {
+            // Initialize tracks.
             tracks[0] = new SequencerTrack();
             tracks[1] = new SequencerTrack();
             tracks[2] = new SequencerTrack();
             tracks[3] = new SequencerTrack();
 
+            // Initialize slots in tracks.
             for (int i = 0; i < 8; i++)
             {
                 tracks[0].slots[i] = new SequencerSlot();
@@ -115,7 +115,8 @@ namespace uwp_technocoid_v10
         /// <param name="newTrackOpacity">The new opacity value</param>
         public void setOpacityForTrack(int sequencerTrack, double newTrackOpacity)
         {
-            if ((newTrackOpacity >= 0.0) && (newTrackOpacity <= 1.0)) {
+            if ((newTrackOpacity >= 0.0) && (newTrackOpacity <= 1.0))
+            {
                 tracks[sequencerTrack].opacity = newTrackOpacity;
             }
         }
@@ -137,7 +138,8 @@ namespace uwp_technocoid_v10
         /// <param name="newTrackOpacity">The new opacity value</param>
         public void setPlaybackRateForTrack(int sequencerTrack, double newTrackPlaybackRate)
         {
-            if ((newTrackPlaybackRate >= 0.5) && (newTrackPlaybackRate <= 3.0))
+            // Playback rates can only be set within specific boundaries.
+            if ((newTrackPlaybackRate >= 0.25) && (newTrackPlaybackRate <= 3.0))
             {
                 tracks[sequencerTrack].playbackRate = newTrackPlaybackRate;
             }

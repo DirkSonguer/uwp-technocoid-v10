@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Windows.Devices.Midi;
 
 namespace uwp_technocoid_v10
 {
@@ -66,6 +56,83 @@ namespace uwp_technocoid_v10
 
             // Set the initial BPM to 60.
             CurrentBpmSlider.Value = 60;
+        }
+
+        /// <summary>
+        /// User pressed the play button.
+        /// Start / stop the sequencer and change the button icon accordingly.
+        /// </summary>
+        /// <param name="sender">The button for the play functionality as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void StartSequencer(object sender, RoutedEventArgs e)
+        {
+            if ("\uE102" == StartSequencerButton.Content.ToString())
+            {
+                StartSequencerButton.Content = "\uE103";
+                this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
+                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
+            }
+            else
+            {
+                StartSequencerButton.Content = "\uE102";
+                this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
+                (sender as Button).Background = this.themeButtonColor;
+            }
+        }
+
+        /// <summary>
+        /// User pressed rewind button.
+        /// This will rewind the sequencer, effectively restarting it from position 0.
+        /// </summary>
+        /// <param name="sender">The button for the rewind functionality as Button</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void RewindSequencer(object sender, RoutedEventArgs e)
+        {
+            this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
+            this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
+        }
+
+        /// <summary>
+        /// Simple exposure to the status message text element.
+        /// </summary>
+        /// <param name="newStatusMessage">String with the new status message</param>
+        public void SetStatusMessage(String newStatusMessage)
+        {
+            StatusTextControl.Text = newStatusMessage;
+        }
+
+        /// <summary>
+        /// Button to set the player window to fullscreen.
+        /// </summary>
+        /// <param name="sender">Button object</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void ToggleFullscreen(object sender, RoutedEventArgs e)
+        {
+            this.globalEventHandlerInstance.NotifyFullscreenModeChanged(true);
+
+            // TODO: Implement!
+            StatusTextControl.Text = "This button does nothing yet.";
+        }
+
+        /// <summary>
+        /// Button to show the MIDI controls in the UI.
+        /// </summary>
+        /// <param name="sender">Button object</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void ToggleMidiControls(object sender, RoutedEventArgs e)
+        {
+            if (((SolidColorBrush)ToggleMidiControlsButton.Background).Color == this.themeButtonColor.Color)
+            {
+                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
+                this.globalEventHandlerInstance.NotifyMidiControlsVisibilityChangedd(Visibility.Visible);
+                StatusTextControl.Text = "Showing MIDI controls.";
+            }
+            else
+            {
+                (sender as Button).Background = this.themeButtonColor;
+                this.globalEventHandlerInstance.NotifyMidiControlsVisibilityChangedd(Visibility.Collapsed);
+                StatusTextControl.Text = "Hiding MIDI controls.";
+            }
         }
 
         /// <summary>
@@ -123,7 +190,6 @@ namespace uwp_technocoid_v10
                  if (midiEvent.type == MidiEventType.BPMChange)
                  {
                      CurrentBpmSlider.Value = (midiEvent.value * 2);
-
                  }
 
                  // Interpret Play toggle.
@@ -291,78 +357,6 @@ namespace uwp_technocoid_v10
             {
                 currentBpm += 10;
                 CurrentBpmSlider.Value = currentBpm;
-            }
-        }
-
-        /// <summary>
-        /// User pressed the play button.
-        /// Start / stop the sequencer and change the button icon accordingly.
-        /// </summary>
-        /// <param name="sender">The button for the play functionality as Button</param>
-        /// <param name="e">RoutedEventArgs</param>
-        private void StartSequencer(object sender, RoutedEventArgs e)
-        {
-            if ("\uE102" == StartSequencerButton.Content.ToString())
-            {
-                StartSequencerButton.Content = "\uE103";
-                this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
-                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
-            }
-            else
-            {
-                StartSequencerButton.Content = "\uE102";
-                this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
-                (sender as Button).Background = this.themeButtonColor;
-            }
-        }
-
-        /// <summary>
-        /// User pressed rewind button.
-        /// This will rewind the sequencer, effectively restarting it from position 0.
-        /// </summary>
-        /// <param name="sender">The button for the rewind functionality as Button</param>
-        /// <param name="e">RoutedEventArgs</param>
-        private void RewindSequencer(object sender, RoutedEventArgs e)
-        {
-            this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(false);
-            this.globalEventHandlerInstance.NotifyCurrentlyPlayingChanged(true);
-        }
-
-        /// <summary>
-        /// Simple exposure to the status message text element.
-        /// </summary>
-        /// <param name="newStatusMessage">String with the new status message</param>
-        public void SetStatusMessage(String newStatusMessage)
-        {
-            StatusTextControl.Text = newStatusMessage;
-        }
-
-        /// <summary>
-        /// Button to set the player window to fullscreen.
-        /// </summary>
-        /// <param name="sender">Button object</param>
-        /// <param name="e">RoutedEventArgs</param>
-        private void ToggleFullscreen(object sender, RoutedEventArgs e)
-        {
-            this.globalEventHandlerInstance.NotifyFullscreenModeChanged(true);
-
-            // TODO: Implement!
-            StatusTextControl.Text = "This button does nothing yet.";
-        }
-
-        private void ToggleMidiControls(object sender, RoutedEventArgs e)
-        {
-            if (((SolidColorBrush)ToggleMidiControlsButton.Background).Color == this.themeButtonColor.Color)
-            {
-                (sender as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
-                this.globalEventHandlerInstance.NotifyMidiControlsVisibilityChangedd(Visibility.Visible);
-                StatusTextControl.Text = "Showing MIDI controls.";
-            }
-            else
-            {
-                (sender as Button).Background = this.themeButtonColor;
-                this.globalEventHandlerInstance.NotifyMidiControlsVisibilityChangedd(Visibility.Collapsed);
-                StatusTextControl.Text = "Hiding MIDI controls.";
             }
         }
     }

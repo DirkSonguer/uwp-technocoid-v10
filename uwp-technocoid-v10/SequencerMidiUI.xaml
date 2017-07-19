@@ -13,30 +13,36 @@
         <StackPanel x:Name="MidiMainControls" Visibility="Collapsed" Orientation="Vertical" HorizontalAlignment="Center" Padding="10, 10, 20, 0">
             <TextBlock x:Name="StatusTextControl" Margin="10,0,10,0" FontSize="10" HorizontalAlignment="Left" TextWrapping="Wrap" Text="No MIDI device found."/>
             <StackPanel x:Name="MidiLearnControls" Visibility="Collapsed" Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Margin="10,10,0,0">
+                    <Button x:Name="MidiEventType8" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="BPM" FontSize="8" Click="LearnMidiCommand"/>
+                    <Button x:Name="MidiEventType9" Margin="0,10,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="&#xE102;" FontFamily="Segoe UI Symbol" FontSize="8" Click="LearnMidiCommand"/>
+                    <Button x:Name="MidiEventType10" Margin="0,10,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="&#xE100;" FontFamily="Segoe UI Symbol" FontSize="8" Click="LearnMidiCommand"/>
+                    <Button x:Name="MidiEventType11" Margin="0,10,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="Trk" FontSize="8" Click="LearnMidiCommand"/>
+                </StackPanel>
                 <StackPanel Orientation="Vertical" Width="180">
                     <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                        <Button x:Name="MidiEventType4" Margin="0,0,10,0" Padding="0,5,0,5" Width="30" Content="BPM" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType5" Margin="0,0,10,0" Padding="0,5,0,5" Width="30" Content="&#xE102;" FontFamily="Segoe UI Symbol" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType6" Margin="0,0,10,0" Padding="0,5,0,5" Width="30" Content="&#xE100;" FontFamily="Segoe UI Symbol" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType7" Margin="0,0,10,0" Padding="0,5,0,5" Width="30" Content="Trk" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType0" Margin="0,0,10,0" Height="25" Width="30" Content="O1" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType1" Margin="0,0,10,0" Height="25" Width="30" Content="O2" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType2" Margin="0,0,10,0" Height="25" Width="30" Content="O3" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType3" Margin="0,0,10,0" Height="25" Width="30" Content="O4" FontSize="8" Click="LearnMidiCommand"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                        <Button x:Name="MidiEventType0" Margin="0,0,10,0" Width="30" Content="O1" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType1" Margin="0,0,10,0" Width="30" Content="O2" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType2" Margin="0,0,10,0" Width="30" Content="O3" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType3" Margin="0,0,10,0" Width="30" Content="O4" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType4" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="PR1" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType5" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="PR2" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType6" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="PR3" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType7" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="PR4" FontSize="8" Click="LearnMidiCommand"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                        <Button x:Name="MidiEventType8" Margin="0,0,10,0" Width="30" Content="S1" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType9" Margin="0,0,10,0" Width="30" Content="S2" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType10" Margin="0,0,10,0" Width="30" Content="S3" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType11" Margin="0,0,10,0" Width="30" Content="S4" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType12" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="S1" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType13" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="S2" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType14" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="S3" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType15" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="S4" FontSize="8" Click="LearnMidiCommand"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                        <Button x:Name="MidiEventType12" Margin="0,0,10,0" Width="30" Content="S5" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType13" Margin="0,0,10,0" Width="30" Content="S6" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType14" Margin="0,0,10,0" Width="30" Content="S7" FontSize="8" Click="LearnMidiCommand"/>
-                        <Button x:Name="MidiEventType15" Margin="0,0,10,0" Width="30" Content="S8" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType16" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="S5" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType17" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="S6" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType18" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="S7" FontSize="8" Click="LearnMidiCommand"/>
+                        <Button x:Name="MidiEventType19" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="S8" FontSize="8" Click="LearnMidiCommand"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Margin="0,10,0,0">

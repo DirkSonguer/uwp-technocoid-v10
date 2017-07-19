@@ -20,18 +20,22 @@ namespace uwp_technocoid_v10
         Opacity1Change = 1,
         Opacity2Change = 2,
         Opacity3Change = 3,
-        BPMChange = 4,
-        PlayToggle = 5,
-        RewindToggle = 6,
-        TrackSelect = 7,
-        Slot0Toggle = 8,
-        Slot1Toggle = 9,
-        Slot2Toggle = 10,
-        Slot3Toggle = 11,
-        Slot4Toggle = 12,
-        Slot5Toggle = 13,
-        Slot6Toggle = 14,
-        Slot7Toggle = 15,
+        PlaybackRate0Change = 4,
+        PlaybackRate1Change = 5,
+        PlaybackRate2Change = 6,
+        PlaybackRate3Change = 7,
+        BPMChange = 8,
+        PlayToggle = 9,
+        RewindToggle = 10,
+        TrackSelect = 11,
+        Slot0Toggle = 12,
+        Slot1Toggle = 13,
+        Slot2Toggle = 14,
+        Slot3Toggle = 15,
+        Slot4Toggle = 16,
+        Slot5Toggle = 17,
+        Slot6Toggle = 18,
+        Slot7Toggle = 19,
         Empty = 99
     };
 
@@ -178,6 +182,12 @@ namespace uwp_technocoid_v10
                 return;
             }
 
+            // Check that the currently selected index actually exists in the current list of devices.
+            if (this.availableMidiDevices[(int)selectedMidiDeviceIndex] == null)
+            {
+                return;
+            }
+
             // Get information about the device that was selected.
             DeviceInformation selectedDeviceInfo = this.availableMidiDevices[(int)selectedMidiDeviceIndex];
             // This might fail if the user has selected a device that was disconnected in the mean time.
@@ -221,7 +231,7 @@ namespace uwp_technocoid_v10
                 learnedMidiEvent.rawOriginalMessage = rawMidiMessage;
 
                 // Check if the message to learn is a ranged value.
-                if ((int)this.midiLearningType < 5)
+                if ((int)this.midiLearningType < 9)
                 {
                     // Ranged values are treated as controllers.
                     if (rawMidiMessage.Type == MidiMessageType.ControlChange)
@@ -259,7 +269,7 @@ namespace uwp_technocoid_v10
             {
                 // If so, check all controller based events if the message is relevant.
                 MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)args.Message;
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 9; i++)
                 {
                     if (this.learnedMidiTriggers[i].id == currentMidiMessage.Controller)
                     {
@@ -276,7 +286,7 @@ namespace uwp_technocoid_v10
             {
                 // If so, check all note based events if the message is relevant.
                 MidiNoteOnMessage currentMidiMessage = (MidiNoteOnMessage)args.Message;
-                for (int i = 5; i < Enum.GetNames(typeof(MidiEventType)).Length; i++)
+                for (int i = 9; i < Enum.GetNames(typeof(MidiEventType)).Length; i++)
                 {
                     if (this.learnedMidiTriggers[i].id == currentMidiMessage.Note)
                     {
@@ -301,7 +311,8 @@ namespace uwp_technocoid_v10
             {
                 this.midiLearningActive = true;
                 this.midiLearningType = (MidiEventType)midiEventToLearn;
-            } else
+            }
+            else
             {
                 this.midiLearningActive = false;
                 this.midiLearningType = (MidiEventType)midiEventToLearn;

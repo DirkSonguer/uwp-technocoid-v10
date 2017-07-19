@@ -53,7 +53,6 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 - Clearing tracks should stop and clear the respective player.
 - The whole thing is slow and stutters / flickers. Maybe I'll fix that.
 - Add an option de- / activate Stretch="UniformToFill" to the UI.
-- Slider for video playback speed for each track?
 - Effects? https://code.msdn.microsoft.com/windowsapps/media-extensions-sample-7b466096
 - Webcam support?
 
@@ -87,4 +86,4 @@ out UWP a little bit.
 - Tested on Windows 10 Creators Update.
 - MIDI input tested with Akai LPD8 Wireless and Doepfer Pocket Control + MIDISport Uno.
 - Developed mostly while listening to https://www.twitch.tv/lost_in_house.
-- Tested during development with videos by https://twitter.com/TatsuyaBot.
+- Tested during development with videos by https://twitter.com/TatsuyaBot. For example: https://twitter.com/TatsuyaBot/status/883635410844254208.

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using Windows.Devices.Enumeration;
-using Windows.Devices.Midi;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 
@@ -41,7 +37,7 @@ namespace uwp_technocoid_v10
                 SequencerPositionChanged(currentSequencerPosition, new PropertyChangedEventArgs("int currentSequencerPosition"));
             }
         }
-        
+
         // An event indicating that the sequencer has been started or stopped.
         // Classes can subscribe to this event and get notified.
         public event PropertyChangedEventHandler CurrentlyPlayingChanged;

@@ -1,26 +1,16 @@
 ﻿using System;
-using Windows.Media.Core;
-using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.ViewManagement;
 using Windows.UI.Core;
+using Windows.UI.Composition;
 using Windows.ApplicationModel.Core;
 using System.ComponentModel;
-using Windows.UI.Xaml.Navigation;
-using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using Windows.Foundation;
 using Windows.System.Threading;
-using Windows.UI.Composition;
-using Windows.UI.Xaml.Hosting;
 using System.Numerics;
-using Windows.UI;
 
 namespace uwp_technocoid_v10
 {
@@ -35,7 +25,10 @@ namespace uwp_technocoid_v10
         GlobalEventHandler globalEventHandlerInstance;
 
         // Timer to measure if window resize is finished.
+        // + min sizes for the window.
         static ThreadPoolTimer windowResizeTimer;
+        int minWindowWidth = 950;
+        int minWindowHeight = 740;
 
         // We use acrylic backgrounds as introduced with Fluent Design.
         // However proper Fluent behavior will be introduced with Build 16190,
@@ -54,7 +47,7 @@ namespace uwp_technocoid_v10
             this.InitializeComponent();
 
             // Setting minimum window size.
-            ApplicationView.PreferredLaunchViewSize = new Size(950, 740);
+            ApplicationView.PreferredLaunchViewSize = new Size(this.minWindowWidth, this.minWindowHeight);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
             // Get an instance to the sequencer data handler.
@@ -178,7 +171,7 @@ namespace uwp_technocoid_v10
             double newWidth = e.Size.Width;
 
             // Check if the window is too narrow.
-            if ((newWidth < 950) || (newHeight < 740))
+            if ((newWidth < this.minWindowWidth) || (newHeight < this.minWindowHeight))
             {
                 // Set the timeout to 1 second.
                 TimeSpan timeout = new TimeSpan(0, 0, 0, 1);
@@ -186,13 +179,10 @@ namespace uwp_technocoid_v10
                 // Create a new timer. After the timeout, the resize code will be executed.
                 windowResizeTimer = ThreadPoolTimer.CreateTimer(async (ThreadPoolTimer timer) =>
                 {
-                    newWidth = 950;
-                    newHeight = 740;
-
                     await this.globalEventHandlerInstance.controllerDispatcher.RunAsync(
                      CoreDispatcherPriority.Normal, () =>
                      {
-                         ApplicationView.GetForCurrentView().TryResizeView(new Size(newWidth, newHeight));
+                         ApplicationView.GetForCurrentView().TryResizeView(new Size(this.minWindowWidth, this.minWindowHeight));
                      });
                 }, timeout);
             }
@@ -251,6 +241,7 @@ namespace uwp_technocoid_v10
             // If the sequencer has been stopped, clear all track highlights.
             if (!(bool)currentSequencerPlaying)
             {
+                // Unmark the current step.
                 sequencerControls.SetStatusMessage("Sequencer stopped, ready.");
                 for (int i = 0; i < 8; i++)
                 {
