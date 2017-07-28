@@ -93,55 +93,16 @@ namespace uwp_technocoid_v10
                  int selectedTrack = 0;
                  selectedTrack = int.Parse(trackName);
 
-                 // Interpret Track select change.
-                 if (midiEvent.type == MidiEventType.TrackSelect)
-                 {
-                     // Check if this is the first track in the sequencer.
-                     if (selectedTrack == 0)
-                     {
-                         // If so, then increase / update the currently active track.
-                         if (this.globalSequencerDataInstance.currentlyActiveTrack < 3)
-                         {
-                             this.globalSequencerDataInstance.currentlyActiveTrack += 1;
-                         }
-                         else
-                         {
-                             this.globalSequencerDataInstance.currentlyActiveTrack = 0;
-                         }
-                     }
-
-                     // Change the activity indicator colors according to the currently active state.
-                     if (this.globalSequencerDataInstance.currentlyActiveTrack == selectedTrack)
-                     {
-                         TrackActivationIndicator.Fill = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
-                     }
-                     else
-                     {
-                         TrackActivationIndicator.Fill = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-                     }
-                 }
-
                  // Interpret opacity change.
                  if ((int)midiEvent.type == selectedTrack)
                  {
-                     OpacitySlider.Value = midiEvent.value;
+                     OpacitySlider.Value = (midiEvent.value / 1.27);
                  }
 
                  // Interpret playback rate change.
                  if ((int)midiEvent.type == (selectedTrack + 4))
                  {
-                     PlaybackRateSlider.Value = midiEvent.value;
-                 }
-
-                 // Interpret slot activation.
-                 if ((int)midiEvent.type >= (int)MidiEventType.Slot0Toggle)
-                 {
-                     if (this.globalSequencerDataInstance.currentlyActiveTrack == selectedTrack)
-                     {
-                         int slotToActivate = (int)midiEvent.type - (int)MidiEventType.Slot0Toggle;
-                         Button slotActivationButton = (Button)this.FindName("Slot" + slotToActivate.ToString() + "Active");
-                         this.ActivateSlot(slotActivationButton, null);
-                     }
+                     PlaybackRateSlider.Value = (midiEvent.value / 1.27);
                  }
              });
         }

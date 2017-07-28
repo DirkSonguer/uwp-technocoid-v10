@@ -27,15 +27,7 @@ namespace uwp_technocoid_v10
         BPMChange = 8,
         PlayToggle = 9,
         RewindToggle = 10,
-        TrackSelect = 11,
-        Slot0Toggle = 12,
-        Slot1Toggle = 13,
-        Slot2Toggle = 14,
-        Slot3Toggle = 15,
-        Slot4Toggle = 16,
-        Slot5Toggle = 17,
-        Slot6Toggle = 18,
-        Slot7Toggle = 19,
+        TapTempo = 11,
         Empty = 99
     };
 
@@ -48,9 +40,8 @@ namespace uwp_technocoid_v10
         // Type of the event so that the recipients can check for relevance.
         public MidiEventType type;
 
-        // Channel and id of the learned MIDI message.
+        // ID of the learned MIDI message.
         // This is used to identify relevant MIDI messages.
-        public int channel;
         public int id;
 
         // The raw MIDI message that was used for training for reference.
@@ -209,6 +200,54 @@ namespace uwp_technocoid_v10
         }
 
         /// <summary>
+        /// Get the ID of the MIDI message.
+        /// </summary>
+        /// <param name="inputMidiMessage">Raw MIDI message.</param>
+        /// <returns>The ID as int.</returns>
+        private int ExtractMidiMessageID(IMidiMessage inputMidiMessage)
+        {
+            // Check controller type messages.
+            if (inputMidiMessage.Type == MidiMessageType.ControlChange)
+            {
+                MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)inputMidiMessage;
+                return currentMidiMessage.Controller;
+            }
+
+            // Check note on type messages.
+            if (inputMidiMessage.Type == MidiMessageType.NoteOn)
+            {
+                MidiNoteOnMessage currentMidiMessage = (MidiNoteOnMessage)inputMidiMessage;
+                return currentMidiMessage.Note;
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Get the relevant value of the MIDI message.
+        /// </summary>
+        /// <param name="inputMidiMessage">Raw MIDI message.</param>
+        /// <returns>The value as int.</returns>
+        private int ExtractMidiMessageValue(IMidiMessage inputMidiMessage)
+        {
+            // Check controller type messages.
+            if (inputMidiMessage.Type == MidiMessageType.ControlChange)
+            {
+                MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)inputMidiMessage;
+                return currentMidiMessage.ControlValue;
+            }
+
+            // Check note on type messages.
+            if (inputMidiMessage.Type == MidiMessageType.NoteOn)
+            {
+                MidiNoteOnMessage currentMidiMessage = (MidiNoteOnMessage)inputMidiMessage;
+                return currentMidiMessage.Velocity;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
         /// A new MIDI message was received.
         /// Check if the message is relevant by checking the trained MIDI events
         /// and if so, send a notification.
@@ -220,6 +259,10 @@ namespace uwp_technocoid_v10
             // Get the message as simple IMidiMessage.
             IMidiMessage rawMidiMessage = (IMidiMessage)args.Message;
 
+            // Get the id and relevant value of the MIDI message.
+            int midiMessageID = this.ExtractMidiMessageID(rawMidiMessage);
+            int midiMessageValue = this.ExtractMidiMessageValue(rawMidiMessage);
+
             // First check if we are in MIDI learn mode.
             // If so, do not interpret the message, but instead use the message to associate
             // its type with an event type.
@@ -230,28 +273,8 @@ namespace uwp_technocoid_v10
                 learnedMidiEvent.type = this.midiLearningType;
                 learnedMidiEvent.rawOriginalMessage = rawMidiMessage;
 
-                // Check if the message to learn is a ranged value.
-                if ((int)this.midiLearningType < 9)
-                {
-                    // Ranged values are treated as controllers.
-                    if (rawMidiMessage.Type == MidiMessageType.ControlChange)
-                    {
-                        MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)args.Message;
-                        learnedMidiEvent.channel = currentMidiMessage.Channel;
-                        learnedMidiEvent.id = currentMidiMessage.Controller;
-                    }
-                }
-                // If it's not a ranged value, it should be a toggle.
-                else
-                {
-                    // Toggles are treated as Note On events.
-                    if (rawMidiMessage.Type == MidiMessageType.NoteOn)
-                    {
-                        MidiNoteOnMessage currentMidiMessage = (MidiNoteOnMessage)args.Message;
-                        learnedMidiEvent.channel = currentMidiMessage.Channel;
-                        learnedMidiEvent.id = currentMidiMessage.Note;
-                    }
-                }
+                // Set the ID of the message.
+                learnedMidiEvent.id = midiMessageID;
 
                 // Store identified MIDI event.
                 this.learnedMidiTriggers[(int)this.midiLearningType] = learnedMidiEvent;
@@ -264,38 +287,16 @@ namespace uwp_technocoid_v10
                 return;
             }
 
-            // Check if the MIDI message was sent by a controller.
-            if (rawMidiMessage.Type == MidiMessageType.ControlChange)
+            // Iterate through all types if the message was recognized.
+            for (int i = 0; i < Enum.GetNames(typeof(MidiEventType)).Length; i++)
             {
-                // If so, check all controller based events if the message is relevant.
-                MidiControlChangeMessage currentMidiMessage = (MidiControlChangeMessage)args.Message;
-                for (int i = 0; i < 9; i++)
+                if (this.learnedMidiTriggers[i].id == midiMessageID)
                 {
-                    if (this.learnedMidiTriggers[i].id == currentMidiMessage.Controller)
-                    {
-                        // Relevant event found, send the notification.
-                        MidiEvent midiEvent = new MidiEvent();
-                        midiEvent.type = this.learnedMidiTriggers[i].type;
-                        midiEvent.value = currentMidiMessage.ControlValue;
-                        this.globalEventHandlerInstance.NotifyMidiEventReceived(midiEvent);
-                    }
-                }
-            }
-            // Check if the MIDI message was sent by a note trigger.
-            else if (rawMidiMessage.Type == MidiMessageType.NoteOn)
-            {
-                // If so, check all note based events if the message is relevant.
-                MidiNoteOnMessage currentMidiMessage = (MidiNoteOnMessage)args.Message;
-                for (int i = 9; i < Enum.GetNames(typeof(MidiEventType)).Length; i++)
-                {
-                    if (this.learnedMidiTriggers[i].id == currentMidiMessage.Note)
-                    {
-                        // Relevant event found, send the notification.
-                        MidiEvent midiEvent = new MidiEvent();
-                        midiEvent.type = this.learnedMidiTriggers[i].type;
-                        midiEvent.value = currentMidiMessage.Note;
-                        this.globalEventHandlerInstance.NotifyMidiEventReceived(midiEvent);
-                    }
+                    // Relevant event found, send the notification.
+                    MidiEvent midiEvent = new MidiEvent();
+                    midiEvent.type = this.learnedMidiTriggers[i].type;
+                    midiEvent.value = midiMessageValue;
+                    this.globalEventHandlerInstance.NotifyMidiEventReceived(midiEvent);
                 }
             }
         }

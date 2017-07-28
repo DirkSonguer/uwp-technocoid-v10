@@ -85,7 +85,7 @@ namespace uwp_technocoid_v10
             else
             {
                 // Stop the timer.
-                masterTimer.Cancel();
+                if (masterTimer != null) masterTimer.Cancel();
             }
         }
 

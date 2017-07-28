@@ -192,6 +192,12 @@ namespace uwp_technocoid_v10
                      CurrentBpmSlider.Value = (midiEvent.value * 2);
                  }
 
+                 // Interpret BPM tap tempo.
+                 if (midiEvent.type == MidiEventType.TapTempo)
+                 {
+                     this.TapDetectionTriggered();
+                 }
+
                  // Interpret Play toggle.
                  if (midiEvent.type == MidiEventType.PlayToggle)
                  {

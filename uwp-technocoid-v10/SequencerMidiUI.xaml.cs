@@ -146,7 +146,7 @@ namespace uwp_technocoid_v10
             if (((SolidColorBrush)(learnCommandButton as Button).Background).Color == this.themeButtonColor.Color)
             {
                 // Clear all button highlights.
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < 12; i++)
                 {
                     Button currentButtonElement = (Button)this.FindName("MidiEventType" + i.ToString());
                     currentButtonElement.Background = this.themeButtonColor;

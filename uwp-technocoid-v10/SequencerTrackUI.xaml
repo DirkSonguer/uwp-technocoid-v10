@@ -10,9 +10,9 @@
     d:DesignWidth="940">
 
     <Grid Background="Transparent">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Margin="10,0,10,0">
             <Rectangle x:Name="TrackActivationIndicator" Width="10"/>
-            <Slider x:Name="OpacitySlider" Margin="10,0,0,0" Orientation="Vertical" VerticalAlignment="Center" Height="100" Minimum="0" Maximum="100" TickPlacement="Outside" TickFrequency="10" Value="100" ValueChanged="ChangeOpacityForTrack"/>
+            <Slider x:Name="OpacitySlider" Margin="0,0,0,0" Orientation="Vertical" VerticalAlignment="Center" Height="100" Minimum="0" Maximum="100" TickPlacement="Outside" TickFrequency="10" Value="100" ValueChanged="ChangeOpacityForTrack"/>
             <StackPanel Orientation="Vertical" Margin="0,0,20,10" VerticalAlignment="Bottom">
                 <Slider x:Name="PlaybackRateSlider" Orientation="Vertical" HorizontalAlignment="Center" Height="65" Minimum="0" Maximum="100" TickPlacement="Outside" TickFrequency="10" Value="50" ValueChanged="ChangePlaybackRateForTrack"/>
                 <Button x:Name="ResetPlaybackRateButton" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="40" Height="30" Padding="0" Content="x1" FontSize="10" Click="ResetPlaybackRate" />
