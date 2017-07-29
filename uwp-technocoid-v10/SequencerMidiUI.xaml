@@ -32,6 +32,11 @@
                         <Button x:Name="MidiEventType6" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="PR3" FontSize="8" Click="LearnMidiCommand"/>
                         <Button x:Name="MidiEventType7" Margin="0,0,10,0" Height="25" Padding="0,0,0,0" Width="30" Content="PR4" FontSize="8" Click="LearnMidiCommand"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,15,0,0">
+                        <Button x:Name="LoadMidiSettingsButton" Margin="0,0,10,0" Height="20" Padding="0,0,0,0" Width="50" Content="Load" FontSize="8" Click="LoadMidiSettings"/>
+                        <Button x:Name="StoreMidiSettingsButton" Margin="0,0,10,0" Height="20" Padding="0,0,0,0" Width="50" Content="Save" IsEnabled="False" FontSize="8" Click="StoreMidiSettings"/>
+                        <Button x:Name="ResetMidiSettingsButton" Margin="0,0,10,0" Height="20" Padding="0,0,0,0" Width="30" Content="Clear" FontSize="8" Click="ResetMidiSettings"/>
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                     <ListBox x:Name="MidiInputDeviceListBox" SelectionChanged="SelectedMidiDeviceChanged"/>

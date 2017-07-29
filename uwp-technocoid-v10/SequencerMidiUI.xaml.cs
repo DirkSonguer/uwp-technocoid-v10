@@ -22,6 +22,9 @@ namespace uwp_technocoid_v10
         // MIDI controller class, handling all the MIDI input.
         MidiController midiController;
 
+        // Local Windows app storage.
+        Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
         public SequencerMidiUI()
         {
             this.InitializeComponent();
@@ -208,7 +211,85 @@ namespace uwp_technocoid_v10
                  Button currentButtonElement = (Button)this.FindName("MidiEventType" + ((int)midiEventLearned).ToString());
                  currentButtonElement.Background = new SolidColorBrush(Color.FromArgb(255, 0, 71, 138));
                  StatusTextControl.Text = "MIDI event learned: " + midiEventLearned.ToString();
+                 StoreMidiSettingsButton.IsEnabled = true;
              });
+        }
+
+        /// <summary>
+        /// Load the MIDI event list from the settings.
+        /// </summary>
+        /// <param name="sender">Button the event was received from</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void LoadMidiSettings(object sender, RoutedEventArgs e)
+        {
+            // Iterate through all MIDI event types.
+            for (int i = 0; i < 12; i++)
+            {
+                // Create a new MidiEventTrigger object.
+                MidiEventTrigger tempMidiEventTrigger = new MidiEventTrigger();
+
+                // Set the type based on the current step.
+                tempMidiEventTrigger.type = (MidiEventType)i;
+
+                // Get trigger id from the storage.
+                tempMidiEventTrigger.id = (int)localSettings.Values[i.ToString()];
+
+                // Set the extracted data to the active MIDI triggers.
+                midiController.learnedMidiTriggers[i] = tempMidiEventTrigger;
+
+                // Find the relevant button for this type.
+                Button currentButtonElement = (Button)this.FindName("MidiEventType" + i.ToString());
+                if (tempMidiEventTrigger.id != 0)
+                {
+                    // If this is an active trigger, highlight it.
+                    currentButtonElement.Background = new SolidColorBrush(Color.FromArgb(255, 0, 71, 138));
+                }
+                else
+                {
+                    // If not, use the standard color for the button.
+                    currentButtonElement.Background = this.themeButtonColor;
+                }
+            }
+
+            // Done, set status text.
+            StatusTextControl.Text = "MIDI settings restored.";
+        }
+
+        /// <summary>
+        /// Store the MIDI event list from the settings.
+        /// </summary>
+        /// <param name="sender">Button the event was received from</param>
+        /// <param name="e">RoutedEventArgs</param>
+        private void StoreMidiSettings(object sender, RoutedEventArgs e)
+        {
+            // Iterate through all MIDI event types.
+            for (int i = 0; i < 12; i++)
+            {
+                // Store the trigger in the storage.
+                localSettings.Values[i.ToString()] = midiController.learnedMidiTriggers[i].id;
+            }
+
+            // Done, set status text.
+            StatusTextControl.Text = "MIDI settings saved.";
+        }
+
+        private void ResetMidiSettings(object sender, RoutedEventArgs e)
+        {
+            // Iterate through all MIDI event types.
+            for (int i = 0; i < 12; i++)
+            {
+                // Create a new MidiEventTrigger object and fill it with empty data.
+                MidiEventTrigger tempMidiEventTrigger = new MidiEventTrigger();
+                tempMidiEventTrigger.type = (MidiEventType)i;
+                tempMidiEventTrigger.id = 0;
+
+                // Set the extracted data to the active MIDI triggers.
+                midiController.learnedMidiTriggers[i] = tempMidiEventTrigger;
+
+                // Find the relevant button for this type and use the standard color.
+                Button currentButtonElement = (Button)this.FindName("MidiEventType" + i.ToString());
+                currentButtonElement.Background = this.themeButtonColor;
+            }
         }
     }
 }
