@@ -142,17 +142,29 @@ namespace uwp_technocoid_v10
         /// <param name="e">RoutedEventArgs</param>
         private void LearnMidiCommand(object learnCommandButton, RoutedEventArgs e)
         {
-            // Check if the button is already active, indicating an active learning session already.
-            if (((SolidColorBrush)(learnCommandButton as Button).Background).Color == this.themeButtonColor.Color)
+            // Check if the button is not already active, indicating an active learning session.
+            // If not, initiate the learning session.
+            if (((SolidColorBrush)(learnCommandButton as Button).Background).Color != Color.FromArgb(255, 0, 120, 215))
             {
                 // Clear all button highlights.
                 for (int i = 0; i < 12; i++)
                 {
                     Button currentButtonElement = (Button)this.FindName("MidiEventType" + i.ToString());
-                    currentButtonElement.Background = this.themeButtonColor;
+
+                    // Check if the type has been trained yet.
+                    if (midiController.learnedMidiTriggers[i].id == 0)
+                    {
+                        // If not, use the standard color for the button.
+                        currentButtonElement.Background = this.themeButtonColor;
+                    }
+                    else
+                    {
+                        // Otherwise use the highlight color.
+                        currentButtonElement.Background = new SolidColorBrush(Color.FromArgb(255, 0, 71, 138));
+                    }
                 }
 
-                // Highlight the relevant button.
+                // Highlight the relevant button that should be learned.
                 (learnCommandButton as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 120, 215));
 
                 // Get ID of the MIDI event type.
@@ -164,8 +176,18 @@ namespace uwp_technocoid_v10
             }
             else
             {
-                // Reset button color.
-                (learnCommandButton as Button).Background = this.themeButtonColor;
+                // Check if the type has been trained yet.
+                var eventType = (learnCommandButton as Button).Name.Substring(13);
+                if (midiController.learnedMidiTriggers[int.Parse(eventType)].id == 0)
+                {
+                    // If not, use the standard color for the button.
+                    (learnCommandButton as Button).Background = this.themeButtonColor;
+                }
+                else
+                {
+                    // Otherwise use the highlight color.
+                    (learnCommandButton as Button).Background = new SolidColorBrush(Color.FromArgb(255, 0, 71, 138));
+                }
 
                 // Notify subscribers that no MIDI event should be learned.
                 this.globalEventHandlerInstance.NotifyLearnMidiEvent(MidiEventType.Empty);
@@ -184,7 +206,7 @@ namespace uwp_technocoid_v10
              {
                  // Find the button associated with the learned event and reset the color.
                  Button currentButtonElement = (Button)this.FindName("MidiEventType" + ((int)midiEventLearned).ToString());
-                 currentButtonElement.Background = this.themeButtonColor;
+                 currentButtonElement.Background = new SolidColorBrush(Color.FromArgb(255, 0, 71, 138));
                  StatusTextControl.Text = "MIDI event learned: " + midiEventLearned.ToString();
              });
         }

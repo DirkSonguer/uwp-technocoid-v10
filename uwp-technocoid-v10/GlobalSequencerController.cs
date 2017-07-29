@@ -114,7 +114,6 @@ namespace uwp_technocoid_v10
              });
         }
 
-
         /// <summary>
         /// Update the BPM counter, setting a new timing for the master timer.
         /// If the timer is running, it will be updated directly.
