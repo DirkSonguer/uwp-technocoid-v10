@@ -3,7 +3,7 @@
   <Identity Name="e4f60a4c-c873-4b78-a043-5a5cdb930a41" Publisher="CN=disongue" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="e4f60a4c-c873-4b78-a043-5a5cdb930a41" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>uwp-technocoid-v10</DisplayName>
+    <DisplayName>Technocoid v10</DisplayName>
     <PublisherDisplayName>disongue</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -16,7 +16,7 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="uwp_technocoid_v10.App">
       <uap:VisualElements DisplayName="Technocoid v10" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Technocoid is a video step sequencer, mostly used as VJ app." BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\LargeTile.png" Square71x71Logo="Assets\SmallTile.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>

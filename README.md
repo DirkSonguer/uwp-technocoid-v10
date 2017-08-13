@@ -16,8 +16,9 @@ source of reference on how to implement things.
 
 - 4 track, 8 step sequencer.
 - Assign and trigger videos at each step.
-- Set opacity for each track to mix video output.
 - BPM control.
+- Set opacity for each track to mix video output.
+- Set playback speed for each track to match BPM.
 - Full MIDI control.
 
 
@@ -53,7 +54,7 @@ Build and run with Visual Studio 2017. VS 2015 might work, too, but I didn't tes
 - Clearing tracks should stop and clear the respective player.
 - The whole thing is slow and stutters / flickers. Maybe I'll fix that.
 - Add an option de- / activate Stretch="UniformToFill" to the UI.
-- Effects? https://code.msdn.microsoft.com/windowsapps/media-extensions-sample-7b466096
+- Effects? See https://code.msdn.microsoft.com/windowsapps/media-extensions-sample-7b466096 and https://english.r2d2rigo.es/2016/03/10/creating-custom-video-effects-in-uwp-apps/
 - Webcam support?
 
 
