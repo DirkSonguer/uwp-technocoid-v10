@@ -1,7 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Hosting;
 using Windows.UI.ViewManagement;
 using Windows.UI.Core;
 using Windows.UI.Composition;
@@ -124,20 +123,6 @@ namespace uwp_technocoid_v10
             // Activate and show the new window.
             bool viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(newViewId);
             sequencerControls.SetStatusMessage("Player window created, ready.");
-
-            // Get compositor and sprite for acrylic simulation.
-            sequencerBackgroundCompositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
-            sequencerBackgroundHostSprite = sequencerBackgroundCompositor.CreateSpriteVisual();
-            sequencerBackgroundHostSprite.Size = new Vector2((float)SequencerBackground.ActualWidth, (float)SequencerBackground.ActualHeight);
-            controllerBackgroundCompositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
-            controllerBackgroundHostSprite = controllerBackgroundCompositor.CreateSpriteVisual();
-            controllerBackgroundHostSprite.Size = new Vector2((float)ControllerBackground.ActualWidth, (float)ControllerBackground.ActualHeight);
-
-            // Activate the acrylic material and set it as a background brush for the grid panel in the background.
-            ElementCompositionPreview.SetElementChildVisual(SequencerBackground, sequencerBackgroundHostSprite);
-            sequencerBackgroundHostSprite.Brush = sequencerBackgroundCompositor.CreateHostBackdropBrush();
-            ElementCompositionPreview.SetElementChildVisual(ControllerBackground, controllerBackgroundHostSprite);
-            controllerBackgroundHostSprite.Brush = controllerBackgroundCompositor.CreateHostBackdropBrush();
         }
 
         /// <summary>

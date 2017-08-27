@@ -8,34 +8,21 @@
     mc:Ignorable="d" RequestedTheme="Dark">
 
     <Grid Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid>
-            <RelativePanel Grid.Column="0" Grid.ColumnSpan="2" MinWidth="40" x:Name="ControllerBackground"/>
-            <RelativePanel Grid.Column="0" Width="{Binding ElementName=MainGrid,Path=Width}" Background="#BB000000"/>
+        <StackPanel Orientation="Vertical" Margin="0,10,0,10" HorizontalAlignment="Center">
             <Viewbox MinHeight="150" MaxHeight="200">
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,10" HorizontalAlignment="Center">
                     <local:SequencerControllerUI x:Name="sequencerControls"/>
                     <local:SequencerMidiUI x:Name="midiControls"/>
                 </StackPanel>
             </Viewbox>
-        </Grid>
-        <Grid Grid.Row="1" Background="Transparent">
-            <RelativePanel Grid.Column="0" Grid.ColumnSpan="2" MinWidth="40" x:Name="SequencerBackground"/>
-            <RelativePanel Grid.Column="0" Width="{Binding ElementName=MainGrid,Path=Width}" Background="#99000000"/>
             <Viewbox>
-                <Grid>
-                    <StackPanel Orientation="Vertical" Margin="0,10,0,10" HorizontalAlignment="Center">
-                        <local:SequencerTrackUI x:Name="sequencerTrack0"/>
-                        <local:SequencerTrackUI x:Name="sequencerTrack1"/>
-                        <local:SequencerTrackUI x:Name="sequencerTrack2"/>
-                        <local:SequencerTrackUI x:Name="sequencerTrack3"/>
-                    </StackPanel>
-                </Grid>
-
+                <StackPanel Orientation="Vertical" Margin="0,10,0,10" HorizontalAlignment="Center">
+                    <local:SequencerTrackUI x:Name="sequencerTrack0"/>
+                    <local:SequencerTrackUI x:Name="sequencerTrack1"/>
+                    <local:SequencerTrackUI x:Name="sequencerTrack2"/>
+                    <local:SequencerTrackUI x:Name="sequencerTrack3"/>
+                </StackPanel>
             </Viewbox>
-        </Grid>
+        </StackPanel>
     </Grid>
 </Page>
