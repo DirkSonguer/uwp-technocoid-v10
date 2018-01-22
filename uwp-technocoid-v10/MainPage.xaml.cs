@@ -29,15 +29,6 @@ namespace uwp_technocoid_v10
         int minWindowWidth = 950;
         int minWindowHeight = 740;
 
-        // We use acrylic backgrounds as introduced with Fluent Design.
-        // However proper Fluent behavior will be introduced with Build 16190,
-        // so we are currently faking it with using compositors and sprites.
-        // See https://stackoverflow.com/questions/43699256/how-to-use-acrylic-accent-in-windows-10-creators-update
-        Compositor sequencerBackgroundCompositor;
-        SpriteVisual sequencerBackgroundHostSprite;
-        Compositor controllerBackgroundCompositor;
-        SpriteVisual controllerBackgroundHostSprite;
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -135,18 +126,6 @@ namespace uwp_technocoid_v10
         /// <param name="e">WindowSizeChangedEventArgs containing the new window size</param>
         public void UpdateUI(CoreWindow sender, WindowSizeChangedEventArgs e)
         {
-            // Update sequencer background sprite.
-            if (sequencerBackgroundHostSprite != null)
-            {
-                sequencerBackgroundHostSprite.Size = e.Size.ToVector2();
-            }
-
-            // Update controller background sprite first.
-            if (controllerBackgroundHostSprite != null)
-            {
-                controllerBackgroundHostSprite.Size = e.Size.ToVector2();
-            }
-
             // Check if the timer is already running.
             // If so, then cancel it. It will be re-created below if the window is still too small.
             if (windowResizeTimer != null) windowResizeTimer.Cancel();
