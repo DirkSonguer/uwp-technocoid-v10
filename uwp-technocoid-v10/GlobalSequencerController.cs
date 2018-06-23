@@ -1,4 +1,13 @@
-﻿using System;
+﻿//---------------------------------------------------------------------------//
+// Technocoid v10
+// link: https://github.com/DirkSonguer/uwp-technocoid-v10
+// authors: Dirk Songuer
+//
+// You should have received a copy of the MIT License
+// along with this program called LICENSE.md
+// If not, see <https://choosealicense.com/licenses/mit/>
+//---------------------------------------------------------------------------//
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Windows.System.Threading;
