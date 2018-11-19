@@ -1,6 +1,6 @@
 ﻿# Technocoid v10
 
-This is simple VJ style app. It is used as an experiment to learn more about UWP in
+This is a simple VJ style app. It is used as an experiment to learn more about UWP in
 regards to real time media handling.
 
 Note that the goal of this app was not to create a polished VJ app, but to learn some
